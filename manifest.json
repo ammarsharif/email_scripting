@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "Email Reader",
+  "description": "Demo Chrome Extension that uses React and Webpack",
+  "version": "1.0.0",
+  "permissions": ["activeTab", "scripting", "tabs", "identity","storage"],
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Email Reader"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["contentScript.js"]
+    }
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "oauth2": {
+    "client_id": "720454154501-uue1ee38rlfupgue5sfsrr804uq8cmmf.apps.googleusercontent.com",
+    "scopes": ["https://www.googleapis.com/auth/userinfo.email"]
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["index.html","iframe.html"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
+  }
+}
