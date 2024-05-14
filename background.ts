@@ -172,6 +172,12 @@ chrome.runtime.onMessage.addListener(async function (message, sender, sendRespon
           },
         });
         const data = await response.json();
+        const inboxMessages = data.messages.filter(message => 
+          message.labelIds.includes('INBOX') && 
+          message.historyId > 0 // Check if the message has been interacted with
+        );
+
+        console.log("Inbox Messages:", inboxMessages);
         console.log("Gmail Messages:", data);
         if(sender?.tab?.id)
         chrome.tabs.sendMessage(sender.tab.id, { action: 'handleAuthToken', token: token });
@@ -192,7 +198,7 @@ chrome.runtime.onMessage.addListener(async function (message, sender, sendRespon
         }
       });
       const data = await response.json();
-      const messages = data.messages; // Array of message IDs
+      const messages = data.messages;
       console.log(messages,'MESSAGE DATA INBOX::::::');
       
       sendResponse({ messages });
