@@ -59,6 +59,13 @@ let iframeExists = false;
     }
   });
 
+  chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+    if (message.action === 'handleAuthToken') {
+      const { token } = message;
+      console.log('Received token in content script:', token);
+    }
+  });
+
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.action === 'clickReplyButton') {
     const replyButton = document.querySelector(
@@ -104,6 +111,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.action === 'handleAuthToken') {
     const { token } = message;
+    chrome.runtime.sendMessage({ action: 'getMessageDetails', messageId: 'MESSAGE_ID', accessToken: token });
     console.log('Received token in content script:', token);
   }
 });

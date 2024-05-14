@@ -161,3 +161,44 @@ chrome.runtime.onMessage.addListener(async function (
     }
   }
 });
+
+chrome.runtime.onMessage.addListener(async function (message, sender, sendResponse) {
+  if (message.action === 'authenticateWithGoogle') {
+    chrome.identity.getAuthToken({ interactive: true }, async function (token) {
+      if (!chrome.runtime.lastError && token) {
+        const response = await fetch("https://www.googleapis.com/gmail/v1/users/me/messages", {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        });
+        const data = await response.json();
+        console.log("Gmail Messages:", data);
+        if(sender?.tab?.id)
+        chrome.tabs.sendMessage(sender.tab.id, { action: 'handleAuthToken', token: token });
+      } else {
+        console.error("Error obtaining token:", chrome.runtime.lastError);
+      }
+    });
+  }
+});
+
+chrome.runtime.onMessage.addListener(async function (message, sender, sendResponse) {
+  if (message.action === 'getAllMessages') {
+    const { accessToken } = message;
+    try {
+      const response = await fetch(`https://www.googleapis.com/gmail/v1/users/me/messages?labelIds=INBOX`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+      const data = await response.json();
+      const messages = data.messages; // Array of message IDs
+      console.log(messages,'MESSAGE DATA INBOX::::::');
+      
+      sendResponse({ messages });
+    } catch (error) {
+      console.error('Error fetching inbox messages:', error);
+      sendResponse({ error: 'Error fetching inbox messages' });
+    }
+  }
+});

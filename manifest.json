@@ -22,8 +22,8 @@
     "https://*/*"
   ],
   "oauth2": {
-    "client_id": "720454154501-uue1ee38rlfupgue5sfsrr804uq8cmmf.apps.googleusercontent.com",
-    "scopes": ["https://www.googleapis.com/auth/userinfo.email"]
+    "client_id": "720454154501-8i4rm9ldrubbfsqe3kcos99n2fir1f3e.apps.googleusercontent.com",
+    "scopes": ["https://www.googleapis.com/auth/gmail.readonly", "https://www.googleapis.com/auth/gmail.compose"]
   },
   "web_accessible_resources": [
     {
