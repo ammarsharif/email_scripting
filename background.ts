@@ -1,9 +1,24 @@
+export async function getAuthToken(): Promise<string | undefined> {
+  return new Promise((resolve) => {
+    chrome?.identity?.getAuthToken({ interactive: true }, (token) => {
+      console.log(token,'token::::::');
+      
+      if (token) {
+        resolve(token);
+      } else {
+        console.error("Error obtaining token:", chrome.runtime.lastError);
+        resolve(undefined);
+      }
+    });
+  });
+}
+
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-  chrome.tabs.query(
+  chrome?.tabs?.query(
     { active: true, currentWindow: true },
     async function (tabs) {
       try {
-        const [tab] = await chrome.tabs.query({
+        const [tab] = await chrome?.tabs?.query({
           active: true,
           currentWindow: true,
         });
@@ -68,7 +83,7 @@ const clickHandler = async (emailText: any) => {
 
     const data = await response.json();
     if (data.result) {
-      const tabs = await chrome.tabs.query({
+      const tabs = await chrome?.tabs?.query({
         active: true,
         currentWindow: true,
       });
@@ -87,7 +102,7 @@ const clickHandler = async (emailText: any) => {
         console.log('No active tab found');
       }
     } else {
-      const tabs = await chrome.tabs.query({
+      const tabs = await chrome?.tabs?.query({
         active: true,
         currentWindow: true,
       });
@@ -119,7 +134,7 @@ chrome.runtime.onMessage.addListener(async function (
 ) {
   if (message.action === 'generateEmailText') {
     const suggestedText = message.selectedTone;
-    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+    const tabs = await chrome?.tabs?.query({ active: true, currentWindow: true });
     const activeTab = tabs[0];
     if (activeTab && activeTab.id) {
       chrome.tabs.sendMessage(activeTab.id, {
@@ -137,7 +152,7 @@ chrome.runtime.onMessage.addListener(async function (
 ) {
   if (message.action === 'suggestedText') {
     const suggestedText = message.suggestion;
-    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+    const tabs = await chrome?.tabs?.query({ active: true, currentWindow: true });
     const activeTab = tabs[0];
     if (activeTab && activeTab.id) {
       chrome.tabs.sendMessage(activeTab.id, {
@@ -154,7 +169,36 @@ chrome.runtime.onMessage.addListener(async function (
   sendResponse
 ) {
   if (message.action === 'closeIframe') {
-    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+    const tabs = await chrome?.tabs?.query({ active: true, currentWindow: true });
+    const activeTab = tabs[0];
+    if (activeTab && activeTab.id) {
+      chrome.tabs.sendMessage(activeTab.id, { action: 'closeIframe' });
+    }
+  }
+});
+
+chrome.runtime.onMessage.addListener(async function (
+  message,
+  sender,
+  sendResponse
+) {
+  console.log(message,'MESSAGE FROM THE HANDLETOKEN:::::');
+  if (message.action === 'getMessageDetails') {
+    const {messageId, accessToken} = message
+    {
+      try {
+        const response = await fetch(`https://www.googleapis.com/gmail/v1/users/me/messages/${messageId}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        const messageDetails = await response.json();
+        console.log('Message Details::::::', messageDetails.snippet);
+      } catch (error) {
+        console.error('Error fetching message details:', error);
+      }
+    } 
+    const tabs = await chrome?.tabs?.query({ active: true, currentWindow: true });
     const activeTab = tabs[0];
     if (activeTab && activeTab.id) {
       chrome.tabs.sendMessage(activeTab.id, { action: 'closeIframe' });
@@ -163,8 +207,9 @@ chrome.runtime.onMessage.addListener(async function (
 });
 
 chrome.runtime.onMessage.addListener(async function (message, sender, sendResponse) {
+  
   if (message.action === 'authenticateWithGoogle') {
-    chrome.identity.getAuthToken({ interactive: true }, async function (token) {
+    const token = await getAuthToken();
       if (!chrome.runtime.lastError && token) {
         const response = await fetch("https://www.googleapis.com/gmail/v1/users/me/messages", {
           headers: {
@@ -172,19 +217,12 @@ chrome.runtime.onMessage.addListener(async function (message, sender, sendRespon
           },
         });
         const data = await response.json();
-        const inboxMessages = data.messages.filter(message => 
-          message.labelIds.includes('INBOX') && 
-          message.historyId > 0 // Check if the message has been interacted with
-        );
-
-        console.log("Inbox Messages:", inboxMessages);
         console.log("Gmail Messages:", data);
         if(sender?.tab?.id)
         chrome.tabs.sendMessage(sender.tab.id, { action: 'handleAuthToken', token: token });
       } else {
         console.error("Error obtaining token:", chrome.runtime.lastError);
       }
-    });
   }
 });
 

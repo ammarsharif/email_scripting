@@ -44,7 +44,7 @@ let iframeExists = false;
         button.style.marginRight = '2px';
         button.style.cursor = 'pointer';
   
-        button.addEventListener('click', function () {
+        button.addEventListener('click', async function () {
           iframeExists = false;
           chrome.runtime.sendMessage({ action: 'authenticateWithGoogle' });
         });
@@ -56,13 +56,6 @@ let iframeExists = false;
           mainSmallDiv?.appendChild(button);
         }
       }
-    }
-  });
-
-  chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-    if (message.action === 'handleAuthToken') {
-      const { token } = message;
-      console.log('Received token in content script:', token);
     }
   });
 
@@ -111,9 +104,12 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.action === 'handleAuthToken') {
     const { token } = message;
-    chrome.runtime.sendMessage({ action: 'getMessageDetails', messageId: 'MESSAGE_ID', accessToken: token });
-    console.log('Received token in content script:', token);
+    const messageElement = document.querySelector('[data-legacy-message-id]');
+    if(messageElement){
+      const messageId = messageElement.getAttribute('data-legacy-message-id');
+    chrome.runtime.sendMessage({ action: 'getMessageDetails', messageId: messageId , accessToken: token });
   }
+}
 });
 
 let suggestedTextClicked = false;
