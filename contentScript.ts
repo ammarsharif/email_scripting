@@ -112,33 +112,9 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 }
 });
 
-let suggestedTextClicked = false;
-
-chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-  if (message.action === 'setResponseInReplyInput' && !suggestedTextClicked) {
-    const replyDiv = document.querySelector(
-      '.Am.aiL.aO9.Al.editable.LW-avf.tS-tW'
-    );
-    if (replyDiv) {
-      const responseText = message.response;
-      const commaIndex = responseText?.indexOf(',');
-      const salutation = responseText?.substring(0, commaIndex + 1);
-      const restOfResponse = responseText?.substring(commaIndex + 1);
-      const styledResponse = `
-        <div style="line-height: 2; font-family: Arial, sans-serif;">
-          ${salutation}<br><br>
-          ${restOfResponse}<br><br>
-          Best regards,<br>
-          [Your Name]
-        </div>`;
-      replyDiv.innerHTML = styledResponse;
-    }
-  }
-});
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.action === 'suggestedText') {
-    suggestedTextClicked = true;
     const replyInput = document.querySelector(
       '.Am.aiL.aO9.Al.editable.LW-avf.tS-tW'
     );

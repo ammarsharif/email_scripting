@@ -92,7 +92,7 @@ const EmailSuggestions: React.FC = () => {
         headers: {
           'content-type': 'application/json',
           'X-RapidAPI-Key':
-            '01d3db204bmshd41c53a6ae8a9d6p15c871jsned9d98a1c36e',
+            '198bada44amshd95219dc04db750p14af07jsne52453168165-123',
           'X-RapidAPI-Host': 'chatgpt-42.p.rapidapi.com',
         },
         body: JSON.stringify({
@@ -153,8 +153,10 @@ const EmailSuggestions: React.FC = () => {
       <h1 style={headingStyle}>Select Email Tone</h1>
       <p style={paragraphStyle}>Please select the tone of your email reply:</p>
       <select id="toneSelect" style={selectStyle} onChange={handleToneChange}>
-        <option value="not_interested">Not Interested</option>
+        <option value="professional">formal</option>
         <option value="professional">Professional</option>
+        <option value="professional">enthusiastic</option>
+        <option value="not_interested">Not Interested</option>
         <option value="impower">Impower</option>
         <option value="attractive">Attractive</option>
       </select>

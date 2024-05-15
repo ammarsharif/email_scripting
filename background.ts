@@ -61,28 +61,6 @@ const textFinder = () => {
 };
 
 const clickHandler = async (emailText: any) => {
-  try {
-    const response = await fetch('https://chatgpt-42.p.rapidapi.com/gpt4', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        'X-RapidAPI-Key':
-          '01d3db204bmshd41c53a6ae8a9d6p15c871jsned9d98a1c36e',
-        'X-RapidAPI-Host': 'chatgpt-42.p.rapidapi.com',
-      },
-      body: JSON.stringify({
-        messages: [
-          {
-            role: 'user',
-            content: emailText,
-          },
-        ],
-        web_access: false,
-      }),
-    });
-
-    const data = await response.json();
-    if (data.result) {
       const tabs = await chrome?.tabs?.query({
         active: true,
         currentWindow: true,
@@ -92,26 +70,7 @@ const clickHandler = async (emailText: any) => {
         chrome.tabs.sendMessage(activeTab.id, { action: 'clickReplyButton' });
         chrome.tabs.sendMessage(activeTab.id, {
           action: 'setResponseInReplyInput',
-          response: data.result,
-        });
-        chrome.tabs.sendMessage(activeTab.id, {
-          action: 'receiveEmailText',
-          response: emailText,
-        });
-      } else {
-        console.log('No active tab found');
-      }
-    } else {
-      const tabs = await chrome?.tabs?.query({
-        active: true,
-        currentWindow: true,
-      });
-      const activeTab = tabs[0];
-      if (activeTab && activeTab.id) {
-        chrome.tabs.sendMessage(activeTab.id, { action: 'clickReplyButton' });
-        chrome.tabs.sendMessage(activeTab.id, {
-          action: 'setResponseInReplyInput',
-          response: data.result,
+          response: 'NO RESPONSE',
         });
         chrome.tabs.sendMessage(activeTab.id, {
           action: 'receiveEmailText',
@@ -121,10 +80,6 @@ const clickHandler = async (emailText: any) => {
         console.log('No active tab found');
       }
       console.log('API response does not contain result');
-    }
-  } catch (error) {
-    console.error('Error:', error);
-  }
 };
 
 chrome.runtime.onMessage.addListener(async function (
@@ -198,11 +153,6 @@ chrome.runtime.onMessage.addListener(async function (
         console.error('Error fetching message details:', error);
       }
     } 
-    const tabs = await chrome?.tabs?.query({ active: true, currentWindow: true });
-    const activeTab = tabs[0];
-    if (activeTab && activeTab.id) {
-      chrome.tabs.sendMessage(activeTab.id, { action: 'closeIframe' });
-    }
   }
 });
 
