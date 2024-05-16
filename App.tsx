@@ -11,7 +11,7 @@ function App() {
     <div style={{ padding: '1em' , margin:'1em'}}>
       <div>
         <h3>Add Button to Webpage</h3>
-        <button onClick={onButtonClick} style={{
+        <button id="webButton" onClick={onButtonClick} style={{
             padding: '10px 30px',
             backgroundColor:'#4CAF50',
             color: 'white',
@@ -19,7 +19,7 @@ function App() {
             borderRadius: '4px',
             cursor: 'pointer',
             outline: 'none',
-          }}>Add Button</button>
+          }} className="webButton">Add Button</button>
       </div>
     </div>
   );

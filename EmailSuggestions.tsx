@@ -52,7 +52,7 @@ const EmailSuggestions: React.FC = () => {
   
 
   const [responseText, setResponseText] = useState<string | null>(null);
-  const [selectedTone, setSelectedTone] = useState<string>('professional');
+  const [selectedTone, setSelectedTone] = useState<string>('formal');
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -60,7 +60,7 @@ const EmailSuggestions: React.FC = () => {
       if (message.action === 'receiveEmailText') {
         const emailText = message?.response;
         const modifiedEmailText = emailText?.replace(
-          'professional',
+          'formal',
           selectedTone
         );
         if (modifiedEmailText && modifiedEmailText.includes(selectedTone)) {
