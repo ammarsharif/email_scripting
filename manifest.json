@@ -3,7 +3,7 @@
   "name": "Email Reader",
   "description": "Demo Chrome Extension that uses React and Webpack",
   "version": "1.0.0",
-  "permissions": ["activeTab", "scripting", "tabs", "identity","storage"],
+  "permissions": ["activeTab", "scripting", "tabs", "identity", "storage"],
   "action": {
     "default_popup": "index.html",
     "default_title": "Email Reader"
@@ -17,17 +17,17 @@
       "js": ["contentScript.js"]
     }
   ],
-  "host_permissions": [
-    "http://*/*",
-    "https://*/*"
-  ],
+  "host_permissions": ["http://*/*", "https://*/*"],
   "oauth2": {
     "client_id": "720454154501-8i4rm9ldrubbfsqe3kcos99n2fir1f3e.apps.googleusercontent.com",
-    "scopes": ["https://www.googleapis.com/auth/gmail.readonly", "https://www.googleapis.com/auth/gmail.compose"]
+    "scopes": [
+      "https://www.googleapis.com/auth/gmail.readonly",
+      "https://www.googleapis.com/auth/gmail.compose"
+    ]
   },
   "web_accessible_resources": [
     {
-      "resources": ["index.html","iframe.html"],
+      "resources": ["index.html", "iframe.html"],
       "matches": ["<all_urls>"]
     }
   ],

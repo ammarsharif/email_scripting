@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 function App() {
   const onButtonClick = async () => {
@@ -8,18 +8,25 @@ function App() {
   };
 
   return (
-    <div style={{ padding: '1em' , margin:'1em'}}>
+    <div style={{ padding: '1em', margin: '1em' }}>
       <div>
         <h3>Add Button to Webpage</h3>
-        <button id="webButton" onClick={onButtonClick} style={{
+        <button
+          id="webButton"
+          onClick={onButtonClick}
+          style={{
             padding: '10px 30px',
-            backgroundColor:'#4CAF50',
+            backgroundColor: '#4CAF50',
             color: 'white',
             border: 'none',
             borderRadius: '4px',
             cursor: 'pointer',
             outline: 'none',
-          }} className="webButton">Add Button</button>
+          }}
+          className="webButton"
+        >
+          Add Button
+        </button>
       </div>
     </div>
   );

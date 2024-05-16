@@ -1,8 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
-
 const EmailSuggestions: React.FC = () => {
-  
   const containerStyle = {
     backgroundColor: '#f7f7f7',
     border: '1px solid #ccc',
@@ -38,9 +36,9 @@ const EmailSuggestions: React.FC = () => {
     marginBottom: '2px',
     backgroundColor: '#eaeaea',
     borderRadius: '4px',
-    lineHeight: '1.5', 
+    lineHeight: '1.5',
     fontFamily: 'Arial, sans-serif',
-    fontSize: '14px', 
+    fontSize: '14px',
   };
 
   const closeButton = {
@@ -52,7 +50,6 @@ const EmailSuggestions: React.FC = () => {
     marginBottom: '20px',
     cursor: 'pointer',
   };
-  
 
   const [responseText, setResponseText] = useState<string | null>(null);
   const [selectedTone, setSelectedTone] = useState<string>('formal');
@@ -61,11 +58,8 @@ const EmailSuggestions: React.FC = () => {
   useEffect(() => {
     const messageListener = (message: any) => {
       if (message.action === 'receiveEmailText') {
-        const emailText = `Please add give a formal reply to this email and don't add prompt like here is you email and all stuff just give me the proper response in a good way \n ${ message?.response}`;
-        const modifiedEmailText = emailText?.replace(
-          'formal',
-          selectedTone
-        );
+        const emailText = `Please add give a formal reply to this email and don't add prompt like here is you email and all stuff just give me the proper response in a good way \n ${message?.response}`;
+        const modifiedEmailText = emailText?.replace('formal', selectedTone);
         if (modifiedEmailText && modifiedEmailText.includes(selectedTone)) {
           generateResponse(modifiedEmailText);
         }
@@ -172,7 +166,10 @@ const EmailSuggestions: React.FC = () => {
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <p
-              style={{ ...responseItemStyle, transition: 'background-color 0.3s ease', }}
+              style={{
+                ...responseItemStyle,
+                transition: 'background-color 0.3s ease',
+              }}
               onClick={() =>
                 handleResponseClick(responseText || 'No response available')
               }
@@ -191,8 +188,6 @@ const EmailSuggestions: React.FC = () => {
     </div>
   );
 };
-
-
 
 const spinnerStyle = `
 .spinner {

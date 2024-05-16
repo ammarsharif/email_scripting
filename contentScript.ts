@@ -1,63 +1,64 @@
 let iframeExists = false;
-  
-  chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
-    const mainDiv = document.querySelector('.amn');
-    if (mainDiv) {
-      if (!document.getElementById('myInjectButton')) {
-        const button = document.createElement('button');
-        button.textContent = 'Button Added';
-        button.id = 'myInjectButton';
-        button.style.padding = '9.5px 16px';
-        button.style.backgroundColor = '#87150b';
-        button.style.color = 'white';
-        button.style.border = '1px solid #87150b';
-        button.style.borderRadius = '18px';
-        button.style.fontWeight = '500';
-        button.style.marginRight = '8px';
-        button.style.cursor = 'pointer';
-        button.style.fontFamily = 'Arial, sans-serif';
-        button.style.fontSize = '.875rem';
-  
-        button.addEventListener('click', function () {
-          chrome.runtime.sendMessage({ action: 'authenticateWithGoogle' });
-          chrome.runtime.sendMessage({ action: 'executeOnClicker' });
-        });
-  
-        const firstSpan = mainDiv.querySelector('span');
-        if (firstSpan) {
-          mainDiv.insertBefore(button, firstSpan);
-        } else {
-          mainDiv.appendChild(button);
-        }
-      }
-    } else if (!mainDiv) {
-      const mainSmallDiv = document.querySelector('.J-J5-Ji.btA');
-      if (!document.getElementById('myInjectSmallButton')) {
-        const button = document.createElement('img');
-        button.src = 'https://media.licdn.com/dms/image/D4D0BAQGd8H31h5niqg/company-logo_200_200/0/1712309492132/evolvebay_logo?e=2147483647&v=beta&t=tSYT6EkXf7aP709xw1DbPc41AbobGq6qtM5PC1El__I';
-        button.alt = 'icon';
-        button.id = 'myInjectSmallButton';
-        button.style.width = '28px';
-        button.style.height = '28px';
-        button.style.borderRadius = '20px';
-        button.style.marginLeft = '10px';
-        button.style.marginRight = '2px';
-        button.style.cursor = 'pointer';
-  
-        button.addEventListener('click', async function () {
-          iframeExists = false;
-          chrome.runtime.sendMessage({ action: 'authenticateWithGoogle' });
-        });
-  
-        const firstSpan = mainSmallDiv?.querySelector('span');
-        if (firstSpan) {
-          mainSmallDiv?.insertBefore(button, firstSpan);
-        } else {
-          mainSmallDiv?.appendChild(button);
-        }
+
+chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+  const mainDiv = document.querySelector('.amn');
+  if (mainDiv) {
+    if (!document.getElementById('myInjectButton')) {
+      const button = document.createElement('button');
+      button.textContent = 'Button Added';
+      button.id = 'myInjectButton';
+      button.style.padding = '9.5px 16px';
+      button.style.backgroundColor = '#87150b';
+      button.style.color = 'white';
+      button.style.border = '1px solid #87150b';
+      button.style.borderRadius = '18px';
+      button.style.fontWeight = '500';
+      button.style.marginRight = '8px';
+      button.style.cursor = 'pointer';
+      button.style.fontFamily = 'Arial, sans-serif';
+      button.style.fontSize = '.875rem';
+
+      button.addEventListener('click', function () {
+        chrome.runtime.sendMessage({ action: 'authenticateWithGoogle' });
+        chrome.runtime.sendMessage({ action: 'executeOnClicker' });
+      });
+
+      const firstSpan = mainDiv.querySelector('span');
+      if (firstSpan) {
+        mainDiv.insertBefore(button, firstSpan);
+      } else {
+        mainDiv.appendChild(button);
       }
     }
-  });
+  } else if (!mainDiv) {
+    const mainSmallDiv = document.querySelector('.J-J5-Ji.btA');
+    if (!document.getElementById('myInjectSmallButton')) {
+      const button = document.createElement('img');
+      button.src =
+        'https://media.licdn.com/dms/image/D4D0BAQGd8H31h5niqg/company-logo_200_200/0/1712309492132/evolvebay_logo?e=2147483647&v=beta&t=tSYT6EkXf7aP709xw1DbPc41AbobGq6qtM5PC1El__I';
+      button.alt = 'icon';
+      button.id = 'myInjectSmallButton';
+      button.style.width = '28px';
+      button.style.height = '28px';
+      button.style.borderRadius = '20px';
+      button.style.marginLeft = '10px';
+      button.style.marginRight = '2px';
+      button.style.cursor = 'pointer';
+
+      button.addEventListener('click', async function () {
+        iframeExists = false;
+        chrome.runtime.sendMessage({ action: 'authenticateWithGoogle' });
+      });
+
+      const firstSpan = mainSmallDiv?.querySelector('span');
+      if (firstSpan) {
+        mainSmallDiv?.insertBefore(button, firstSpan);
+      } else {
+        mainSmallDiv?.appendChild(button);
+      }
+    }
+  }
+});
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.action === 'clickReplyButton') {
@@ -105,13 +106,16 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.action === 'handleAuthToken') {
     const { token } = message;
     const messageElement = document.querySelector('[data-legacy-message-id]');
-    if(messageElement){
+    if (messageElement) {
       const messageId = messageElement.getAttribute('data-legacy-message-id');
-    chrome.runtime.sendMessage({ action: 'getMessageDetails', messageId: messageId , accessToken: token });
+      chrome.runtime.sendMessage({
+        action: 'getMessageDetails',
+        messageId: messageId,
+        accessToken: token,
+      });
+    }
   }
-}
 });
-
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.action === 'suggestedText') {

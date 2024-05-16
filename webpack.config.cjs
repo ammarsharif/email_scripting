@@ -14,25 +14,27 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
-    clean: true
+    clean: true,
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: './index.html',
       filename: 'index.html',
-      inject: false
+      inject: false,
     }),
     new HtmlWebpackPlugin({
       template: './iframe.html',
       filename: 'iframe.html',
-      inject: false
+      inject: false,
     }),
     new CopyPlugin({
-      patterns: [{
-        from: path.resolve('manifest.json'),
-        to: path.resolve('dist')
-      }]
-    })
+      patterns: [
+        {
+          from: path.resolve('manifest.json'),
+          to: path.resolve('dist'),
+        },
+      ],
+    }),
   ],
   module: {
     rules: [
@@ -44,15 +46,15 @@ module.exports = {
           options: {
             presets: [
               '@babel/preset-env',
-              ['@babel/preset-react', {'runtime': 'automatic'}],
-              '@babel/preset-typescript'
-            ]
-          }
-        }
-      }
-    ]
+              ['@babel/preset-react', { runtime: 'automatic' }],
+              '@babel/preset-typescript',
+            ],
+          },
+        },
+      },
+    ],
   },
   resolve: {
-    extensions: ['.ts', '.tsx']
-  }
+    extensions: ['.ts', '.tsx'],
+  },
 };
