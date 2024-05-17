@@ -4,16 +4,37 @@ const EmailSuggestions: React.FC = () => {
   const containerStyle = {
     backgroundColor: '#f7f7f7',
     padding: '20px',
-    width: '265px',
+    width: '325px',
     margin: '-12px',
-    paddingBottom: '105px',
+    paddingBottom: '14em',
     fontFamily: 'Arial, sans-serif',
   };
 
   const headingStyle = {
     color: '#333',
-    fontSize: '24px',
+    fontSize: '19px',
+    fontWeight: 'bold',
     marginBottom: '10px',
+    marginTop: '4px',
+    marginLeft: '8px',
+  };
+
+  const header = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: '10px',
+  };
+
+  const logoHeader = {
+    display: 'flex',
+  };
+
+  const dividerStyle = {
+    width: '100%',
+    border: 'none',
+    borderBottom: '1px solid #ccc',
+    margin: '10px 0',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
   };
 
   const selectStyle = {
@@ -27,6 +48,7 @@ const EmailSuggestions: React.FC = () => {
     cursor: 'pointer',
     padding: '8px',
     marginBottom: '2px',
+    marginTop: '0px',
     backgroundColor: '#eaeaea',
     borderRadius: '4px',
     lineHeight: '1.5',
@@ -36,13 +58,12 @@ const EmailSuggestions: React.FC = () => {
   };
 
   const closeButton = {
-    marginTop: '8px',
-    height: '23px',
-    fontSize: '13px',
-    color: '#ffffff',
-    backgroundColor: '#87150b',
+    marginTop: '0px',
+    height: '25px',
+    fontSize: '20px',
+    color: '#87150b',
+    backgroundColor: 'transparent',
     border: 'none',
-    borderRadius: '50%',
     cursor: 'pointer',
   };
 
@@ -137,29 +158,39 @@ const EmailSuggestions: React.FC = () => {
     <div
       style={{
         ...containerStyle,
-        display: 'flex',
-        flexDirection: 'row-reverse',
       }}
     >
-      <button
-        className="close_button"
-        style={closeButton}
-        onClick={() => handleCloseButton()}
-      >
-        &#x2715;
-      </button>
       <div>
-        <h1 style={headingStyle}>Select Email Tone</h1>
+        <div style={header}>
+          <div style={logoHeader}>
+            <img
+              src="https://media.licdn.com/dms/image/D4D0BAQGd8H31h5niqg/company-logo_200_200/0/1712309492132/evolvebay_logo?e=2147483647&v=beta&t=tSYT6EkXf7aP709xw1DbPc41AbobGq6qtM5PC1El__I"
+              height={'28px'}
+              width={'28px'}
+              style={{ borderRadius: '50%' }}
+            ></img>
+            <p style={headingStyle}>Email Reply Tone</p>
+          </div>
+          <div>
+            <button
+              className="close_button"
+              style={closeButton}
+              onClick={() => handleCloseButton()}
+            >
+              &#x2715;
+            </button>
+          </div>
+        </div>
+        <hr style={dividerStyle} />
         <select id="toneSelect" style={selectStyle} onChange={handleToneChange}>
-          <option value="professional">formal</option>
+          <option value="formal">Formal</option>
           <option value="professional">Professional</option>
-          <option value="professional">enthusiastic</option>
+          <option value="enthusiastic">Enthusiastic</option>
           <option value="not_interested">Not Interested</option>
           <option value="impower">Impower</option>
           <option value="attractive">Attractive</option>
         </select>
         <div>
-          <img src="https://media.licdn.com/dms/image/D4D0BAQGd8H31h5niqg/company-logo_200_200/0/1712309492132/evolvebay_logo?e=2147483647&v=beta&t=tSYT6EkXf7aP709xw1DbPc41AbobGq6qtM5PC1El__I"></img>
           <p style={{ marginTop: '20px' }}>Select a response:</p>
           {loading ? (
             <div className="spinner"></div>
