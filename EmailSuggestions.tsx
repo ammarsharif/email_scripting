@@ -3,13 +3,10 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 const EmailSuggestions: React.FC = () => {
   const containerStyle = {
     backgroundColor: '#f7f7f7',
-    border: '1px solid #ccc',
-    borderRadius: '8px',
     padding: '20px',
     width: '265px',
-    height: '100%',
     margin: '-12px',
-    paddingBottom: '100px',
+    paddingBottom: '105px',
     fontFamily: 'Arial, sans-serif',
   };
 
@@ -17,10 +14,6 @@ const EmailSuggestions: React.FC = () => {
     color: '#333',
     fontSize: '24px',
     marginBottom: '10px',
-  };
-
-  const paragraphStyle = {
-    color: '#666',
   };
 
   const selectStyle = {
@@ -39,15 +32,17 @@ const EmailSuggestions: React.FC = () => {
     lineHeight: '1.5',
     fontFamily: 'Arial, sans-serif',
     fontSize: '14px',
+    transition: 'background-color 0.3s ease',
   };
 
   const closeButton = {
-    backgroundColor: '#ccc',
-    color: '#333',
-    padding: '8px 16px',
+    marginTop: '8px',
+    height: '23px',
+    fontSize: '13px',
+    color: '#ffffff',
+    backgroundColor: '#87150b',
     border: 'none',
-    borderRadius: '4px',
-    marginBottom: '20px',
+    borderRadius: '50%',
     cursor: 'pointer',
   };
 
@@ -139,51 +134,57 @@ const EmailSuggestions: React.FC = () => {
   };
 
   return (
-    <div style={containerStyle}>
+    <div
+      style={{
+        ...containerStyle,
+        display: 'flex',
+        flexDirection: 'row-reverse',
+      }}
+    >
       <button
         className="close_button"
         style={closeButton}
         onClick={() => handleCloseButton()}
       >
-        Close
+        &#x2715;
       </button>
-      <h1 style={headingStyle}>Select Email Tone</h1>
-      <p style={paragraphStyle}>Please select the tone of your email reply:</p>
-      <select id="toneSelect" style={selectStyle} onChange={handleToneChange}>
-        <option value="professional">formal</option>
-        <option value="professional">Professional</option>
-        <option value="professional">enthusiastic</option>
-        <option value="not_interested">Not Interested</option>
-        <option value="impower">Impower</option>
-        <option value="attractive">Attractive</option>
-      </select>
       <div>
-        <p style={{ ...paragraphStyle, marginTop: '20px' }}>
-          Select a response:
-        </p>
-        {loading ? (
-          <div className="spinner"></div>
-        ) : (
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <p
-              style={{
-                ...responseItemStyle,
-                transition: 'background-color 0.3s ease',
-              }}
-              onClick={() =>
-                handleResponseClick(responseText || 'No response available')
-              }
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#E5E4E2';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#f0f0f0';
-              }}
-            >
-              {responseText || 'No response available'}
-            </p>
-          </div>
-        )}
+        <h1 style={headingStyle}>Select Email Tone</h1>
+        <select id="toneSelect" style={selectStyle} onChange={handleToneChange}>
+          <option value="professional">formal</option>
+          <option value="professional">Professional</option>
+          <option value="professional">enthusiastic</option>
+          <option value="not_interested">Not Interested</option>
+          <option value="impower">Impower</option>
+          <option value="attractive">Attractive</option>
+        </select>
+        <div>
+          <img src="https://media.licdn.com/dms/image/D4D0BAQGd8H31h5niqg/company-logo_200_200/0/1712309492132/evolvebay_logo?e=2147483647&v=beta&t=tSYT6EkXf7aP709xw1DbPc41AbobGq6qtM5PC1El__I"></img>
+          <p style={{ marginTop: '20px' }}>Select a response:</p>
+          {loading ? (
+            <div className="spinner"></div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <p
+                style={{
+                  ...responseItemStyle,
+                  transition: 'background-color 0.3s ease',
+                }}
+                onClick={() =>
+                  handleResponseClick(responseText || 'No response available')
+                }
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#e6e6e6';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#f0f0f0';
+                }}
+              >
+                {responseText || 'No response available'}
+              </p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

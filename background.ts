@@ -2,8 +2,7 @@ let emailText = null;
 export async function getAuthToken(): Promise<string | undefined> {
   return new Promise((resolve) => {
     chrome?.identity?.getAuthToken({ interactive: true }, (token) => {
-      console.log(token, 'token::::::');
-
+      console.log(token, 'TOKEN::::::');
       if (token) {
         resolve(token);
       } else {
@@ -32,7 +31,6 @@ chrome.runtime.onMessage.addListener(async function (
           }
         );
         const messageDetails = await response.json();
-        console.log('Message Details::::::', messageDetails.snippet);
         emailText = messageDetails.snippet;
       } catch (error) {
         console.error('Error fetching message details:', error);
@@ -41,27 +39,20 @@ chrome.runtime.onMessage.addListener(async function (
   }
 });
 
-chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-  chrome?.tabs?.query(
-    { active: true, currentWindow: true },
-    async function (tabs) {
-      try {
-        const [tab] = await chrome?.tabs?.query({
-          active: true,
-          currentWindow: true,
-        });
+chrome.runtime.onMessage.addListener(async function (message, sender, sendResponse) {
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
-        if (tab && tab.id) {
-          clickHandler();
-        } else {
-          console.log('No active tab found');
-        }
-      } catch (error) {
-        console.log('Error querying tabs:' + error);
-      }
+    if (tab && tab.id) {
+      clickHandler();
+    } else {
+      console.log('No active tab found');
     }
-  );
+  } catch (error) {
+    console.log('Error querying tabs:', error);
+  }
 });
+
 
 const clickHandler = async () => {
   const tabs = await chrome?.tabs?.query({
@@ -148,16 +139,6 @@ chrome.runtime.onMessage.addListener(async function (
   if (message.action === 'authenticateWithGoogle') {
     const token = await getAuthToken();
     if (!chrome.runtime.lastError && token) {
-      const response = await fetch(
-        'https://www.googleapis.com/gmail/v1/users/me/messages',
-        {
-          headers: {
-            Authorization: 'Bearer ' + token,
-          },
-        }
-      );
-      const data = await response.json();
-      console.log('Gmail Messages:', data);
       if (sender?.tab?.id)
         chrome.tabs.sendMessage(sender.tab.id, {
           action: 'handleAuthToken',

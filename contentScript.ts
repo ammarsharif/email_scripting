@@ -46,8 +46,11 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
       button.style.cursor = 'pointer';
 
       button.addEventListener('click', async function () {
-        iframeExists = false;
         chrome.runtime.sendMessage({ action: 'authenticateWithGoogle' });
+        iframeExists = false;
+        if(iframeExists){
+          chrome.runtime.sendMessage({ action: 'closeIframe' });
+        }
       });
 
       const firstSpan = mainSmallDiv?.querySelector('span');
@@ -65,9 +68,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     const replyButton = document.querySelector(
       '.ams.bkH'
     ) as HTMLElement | null;
-    if (replyButton) {
-      replyButton.click();
-    } else {
+      replyButton?.click();
       if (!iframeExists) {
         const iframe = document.createElement('iframe');
         iframe.style.cssText = `
@@ -76,7 +77,9 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
             right: 3em; 
             width: 300px; 
             height: 350px;
-            border: 1px solid blue;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
             border-radius: 17px;
             z-index: 999999;
             background-color: white;
@@ -93,12 +96,13 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
           if (message.action === 'closeIframe') {
             if (iframe && iframe.parentNode) {
               iframe.parentNode.removeChild(iframe);
+              iframeExists = true;
             }
           }
         };
         chrome.runtime.onMessage.addListener(closeListener);
       }
-    }
+    
   }
 });
 
