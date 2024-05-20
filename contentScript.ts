@@ -1,4 +1,9 @@
 let iframeExists = false;
+// chrome.storage.local.get(['authenticated'], (result) => {
+//   if (result.authenticated) {
+//     injectButton();
+//   }
+// });
 
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   const mainDiv = document.querySelector('.amn');

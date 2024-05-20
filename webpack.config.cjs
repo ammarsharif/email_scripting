@@ -30,8 +30,8 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         {
-          from: path.resolve('manifest.json'),
-          to: path.resolve('dist'),
+          from: path.resolve(__dirname, 'manifest.json'),
+          to: path.resolve(__dirname, 'dist'),
         },
       ],
     }),
@@ -39,7 +39,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /.(ts|tsx)$/,
+        test: /\.(ts|tsx)$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',

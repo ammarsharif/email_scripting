@@ -102,7 +102,7 @@ const EmailSuggestions: React.FC = () => {
 
   const [responseText, setResponseText] = useState<string | null>(null);
   const [selectedTone, setSelectedTone] = useState<string>('formal');
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const messageListener = (message: any) => {

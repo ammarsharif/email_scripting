@@ -6,10 +6,18 @@ function App() {
     const activeTab = tabs[0];
     chrome.tabs.sendMessage(activeTab.id || 0, '');
   };
-  // useEffect(() => {
-  //   setInterval(()=>{onButtonClick()},2000)
 
-  // },[])
+  useEffect(() => {
+    chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+      console.log('BUTTON FROM THE APP>TSX::::::::');
+      
+      if (message.action === 'addButton') {
+        const emailText = message.emailText;
+      }
+    });
+    // setTimeout(()=>{onButtonClick()},1000)
+  },[])
+
   return (
     <div style={{ padding: '1em', margin: '1em' }}>
       <div>

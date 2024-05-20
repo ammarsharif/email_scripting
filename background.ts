@@ -4,6 +4,7 @@ export async function getAuthToken(): Promise<string | undefined> {
     chrome?.identity?.getAuthToken({ interactive: true }, (token) => {
       console.log(token, 'TOKEN::::::');
       if (token) {
+        // chrome.storage.local.set({ authenticated: true });
         resolve(token);
       } else {
         console.error('Error obtaining token:', chrome.runtime.lastError);
@@ -12,6 +13,26 @@ export async function getAuthToken(): Promise<string | undefined> {
     });
   });
 }
+
+// async function injectButtonInAllTabs() {
+//   const tabs = await chrome.tabs.query({});
+//   tabs.forEach((tab) => {
+//     if (tab.id) {
+//       chrome.scripting.executeScript({
+//         target: { tabId: tab.id },
+//         files: ['contentScript.js']
+//       });
+//     }
+//   });
+// }
+
+// chrome.runtime.onInstalled.addListener(() => {
+//   chrome.storage.local.get(['authenticated'], (result) => {
+//     if (result.authenticated) {
+//       injectButtonInAllTabs();
+//     }
+//   });
+// });
 
 chrome.runtime.onMessage.addListener(async function (
   message,
@@ -144,8 +165,24 @@ chrome.runtime.onMessage.addListener(async function (
           action: 'handleAuthToken',
           token: token,
         });
+        // injectButtonInAllTabs();
     } else {
       console.error('Error obtaining token:', chrome.runtime.lastError);
     }
   }
 });
+
+// chrome.runtime.onMessage.addListener(async function (message, sender, sendResponse) {
+//   try {
+//     const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+//     const activeTab = tabs[0];
+//     if (activeTab && !activeTab?.url?.startsWith('chrome://')) {
+//       if(activeTab.id)
+//       chrome.tabs.sendMessage(activeTab?.id, { action: message.action });
+//     } else {
+//       console.error('Cannot access chrome:// URL');
+//     }
+//   } catch (error) {
+//     console.error('Error in onMessage listener:', error);
+//   }
+// });
