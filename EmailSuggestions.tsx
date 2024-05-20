@@ -2,17 +2,16 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 
 const EmailSuggestions: React.FC = () => {
   const containerStyle = {
-    backgroundColor: '#f7f7f7',
+    backgroundColor: '#fffff',
     padding: '20px',
     width: '525px',
     margin: '-12px',
-    paddingBottom: '17em',
     fontFamily: 'Arial, sans-serif',
   };
 
   const headingStyle = {
     color: '#333',
-    fontSize: '17px',
+    fontSize: '16px',
     fontWeight: 'bold',
     marginBottom: '10px',
     marginTop: '10px',
@@ -31,21 +30,29 @@ const EmailSuggestions: React.FC = () => {
   };
 
   const toneHeader = {
-    display:'flex'
+    display: 'flex',
   };
 
   const toneHeaderText = {
     width: '100%',
     padding: '7px 0px 0px 3px',
     marginTop: '10px',
-    fontSize: '15px',
+    marginRight: '3px',
+    fontSize: '13px',
   };
 
-  const dividerStyle = {
+  const headDivider = {
     width: '100%',
     border: 'none',
     borderBottom: '1px solid #ccc',
-    margin: '18px 0px 10px 0px',
+    margin: '18px 0px 6px 0px',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+  };
+
+  const replyDivider = {
+    width: '100%',
+    border: 'none',
+    borderBottom: '1px solid #ccc',
     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
   };
 
@@ -54,25 +61,27 @@ const EmailSuggestions: React.FC = () => {
     alignItems: 'center',
     border: '1px solid #cfcfcf',
     borderRadius: '5px',
+    padding: '0px 7px',
     marginRight: '15px',
   };
 
   const selectStyle = {
-    width: '60%',
+    width: 'auto',
     padding: '10px 24px 10px 18px',
     borderRadius: '10px',
     border: 'none',
     margin: '0px',
     backgroundColor: '#deedff',
-    fontSize: '15px',
+    fontSize: '13px',
+    outline: 'none',
   };
 
   const selectorStyle = {
     marginRight: '0px',
   };
-  
+
   const iconStyle = {
-    display:'flex',
+    display: 'flex',
     marginRight: '5px',
     marginLeft: '10px',
     alignItems: 'center',
@@ -81,12 +90,13 @@ const EmailSuggestions: React.FC = () => {
   const responseItemStyle = {
     cursor: 'pointer',
     padding: '8px',
-    marginBottom: '2px',
-    backgroundColor: '#eaeaea',
+    margin: '5px 0px',
+    backgroundColor: '#fffff',
     borderRadius: '4px',
     lineHeight: '1.5',
     fontFamily: 'Arial, sans-serif',
-    fontSize: '14px',
+    color: '#4d4d4d',
+    fontSize: '16px',
     transition: 'background-color 0.3s ease',
   };
 
@@ -100,7 +110,9 @@ const EmailSuggestions: React.FC = () => {
     cursor: 'pointer',
   };
 
-  const [responseText, setResponseText] = useState<string | null>(null);
+  const [responseText, setResponseText] = useState<{ text: string }[] | null>(
+    null
+  );
   const [selectedTone, setSelectedTone] = useState<string>('formal');
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -133,33 +145,46 @@ const EmailSuggestions: React.FC = () => {
       console.log(
         'Generating Response of ' + modifiedEmailText + '. Please wait...'
       );
-      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-          'Authorization':
-            'Bearer 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-123',
-        },
-        body: JSON.stringify({
-          messages: [
-            {
-              role: 'user',
-              content: modifiedEmailText,
-            },
-          ],
-          model: 'mixtral-8x7b-32768',
-        }),
-      });
 
-      const dataJson = await response.json();
-      const data = dataJson.choices[0].message.content;
-      console.log(data,'DATA FROM THE API::::');
-      
-      if (data) {
-        console.log(data, 'API response DATA contain result');
-        setResponseText(data);
+      const responses: { text: string }[] = [];
+
+      for (let i = 0; i < 3; i++) {
+        const response = await fetch(
+          'https://openrouter.ai/api/v1/chat/completions',
+          {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+              Authorization:
+                'Bearer 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',
+            },
+            body: JSON.stringify({
+              messages: [
+                {
+                  role: 'user',
+                  content: modifiedEmailText,
+                },
+              ],
+              model: 'openai/gpt-3.5-turbo',
+              max_tokens: 200,
+            }),
+          }
+        );
+
+        const dataJson = await response.json();
+        const choice = dataJson.choices[0];
+        const responseContent = choice?.message.content;
+
+        if (responseContent) {
+          responses.push({ text: responseContent });
+        }
+      }
+
+      if (responses.length === 3) {
+        console.log(responses, 'API response DATA contain result');
+        setResponseText(responses);
       } else {
-        console.log('API response does not contain result');
+        console.log('API response does not contain three results');
         return null;
       }
     } catch (error) {
@@ -169,13 +194,6 @@ const EmailSuggestions: React.FC = () => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    const replyDiv = document.querySelector('.response');
-    if (replyDiv && responseText) {
-      replyDiv.innerHTML = responseText;
-    }
-  }, [responseText]);
 
   const handleResponseClick = (response: string) => {
     chrome.runtime.sendMessage({
@@ -207,26 +225,35 @@ const EmailSuggestions: React.FC = () => {
             <p style={headingStyle}>Email Reply Tone</p>
           </div>
           <div style={toneHeader}>
-          <div style={selectContainerStyle}>
-          <div style={selectorStyle}>
-            <span role="img" aria-label="Bulb" style={iconStyle}>
-            <img src='https://image.similarpng.com/very-thumbnail/2020/08/Shining-bright-idea-light-bulb-with-cogs-on-transparent-background-PNG.png' height={'20px'} width={'20px'}></img>
-            <p style={toneHeaderText}>Tone</p>
-            </span>
-          </div>
-          <select
-            id="toneSelect"
-            style={{...selectStyle, WebkitAppearance: 'none', MozAppearance: 'none', appearance: 'none'}}
-            onChange={handleToneChange}
-          >
-            <option value="formal">👔 Formal</option>
-            <option value="professional">💼 Professional</option>
-            <option value="enthusiastic">🌟 Enthusiastic</option>
-            <option value="not_interested">🚫 Not Interested</option>
-            <option value="impower">💪 Empower</option>
-            <option value="attractive">😍 Attractive</option>
-          </select>
-        </div>
+            <div style={selectContainerStyle}>
+              <div style={selectorStyle}>
+                <span role="img" aria-label="Bulb" style={iconStyle}>
+                  <img
+                    src="https://image.similarpng.com/very-thumbnail/2020/08/Shining-bright-idea-light-bulb-with-cogs-on-transparent-background-PNG.png"
+                    height={'20px'}
+                    width={'20px'}
+                  ></img>
+                  <p style={toneHeaderText}>Tone</p>
+                </span>
+              </div>
+              <select
+                id="toneSelect"
+                style={{
+                  ...selectStyle,
+                  WebkitAppearance: 'none',
+                  MozAppearance: 'none',
+                  appearance: 'none',
+                }}
+                onChange={handleToneChange}
+              >
+                <option value="formal">👔 Formal</option>
+                <option value="professional">💼 Professional</option>
+                <option value="enthusiastic">🌟 Enthusiastic</option>
+                <option value="not_interested">🚫 Not Interested</option>
+                <option value="impower">💪 Empower</option>
+                <option value="attractive">😍 Attractive</option>
+              </select>
+            </div>
             <button
               className="close_button"
               style={closeButton}
@@ -236,29 +263,50 @@ const EmailSuggestions: React.FC = () => {
             </button>
           </div>
         </div>
-        <hr style={dividerStyle} />
+        <hr style={headDivider} />
         <div>
           {loading ? (
             <div className="spinner"></div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <p
-                style={{
-                  ...responseItemStyle,
-                  transition: 'background-color 0.3s ease',
-                }}
-                onClick={() =>
-                  handleResponseClick(responseText || 'No response available')
-                }
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#f0f0f0';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#e6e6e6';
-                }}
-              >
-                {responseText || 'No response available'}
-              </p>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              {responseText ? (
+                responseText.map((response, index) => (
+                  <div key={index}>
+                    <p
+                      style={{
+                        ...responseItemStyle,
+                        transition: 'background-color 0.3s ease',
+                      }}
+                      onClick={() => handleResponseClick(response.text)}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#f7f7f7';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = '#ffffff';
+                      }}
+                    >
+                      {response.text}
+                    </p>
+                    {index < responseText.length - 1 && (
+                      <hr style={replyDivider} />
+                    )}
+                  </div>
+                ))
+              ) : (
+                <p
+                  style={{
+                    ...responseItemStyle,
+                    fontFamily: 'Arial, sans-serif',
+                  }}
+                >
+                  No response available
+                </p>
+              )}
             </div>
           )}
         </div>

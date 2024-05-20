@@ -13,8 +13,8 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
       button.textContent = 'Button Added';
       button.id = 'myInjectButton';
       button.style.padding = '9.5px 16px';
-      button.style.backgroundColor = '#87150b';
-      button.style.color = 'white';
+      button.style.backgroundColor = 'white';
+      button.style.color = '#87150b';
       button.style.border = '1px solid #87150b';
       button.style.borderRadius = '18px';
       button.style.fontWeight = '500';

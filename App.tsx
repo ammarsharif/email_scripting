@@ -15,7 +15,7 @@ function App() {
         const emailText = message.emailText;
       }
     });
-    // setTimeout(()=>{onButtonClick()},1000)
+    setTimeout(()=>{onButtonClick()},1000)
   },[])
 
   return (
