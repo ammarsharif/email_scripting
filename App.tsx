@@ -8,15 +8,21 @@ function App() {
   };
 
   useEffect(() => {
-    chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+    chrome.runtime.onMessage.addListener(function (
+      message,
+      sender,
+      sendResponse
+    ) {
       console.log('BUTTON FROM THE APP>TSX::::::::');
-      
+
       if (message.action === 'addButton') {
         const emailText = message.emailText;
       }
     });
-    setTimeout(()=>{onButtonClick()},1000)
-  },[])
+    setTimeout(() => {
+      onButtonClick();
+    }, 0);
+  }, []);
 
   return (
     <div style={{ padding: '1em', margin: '1em' }}>

@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-
 const EmailSuggestions: React.FC = () => {
   const containerStyle = {
     backgroundColor: '#fffff',
@@ -83,7 +82,7 @@ const EmailSuggestions: React.FC = () => {
   const iconStyle = {
     display: 'flex',
     marginRight: '5px',
-    marginLeft: '10px',
+    marginLeft: '0px',
     alignItems: 'center',
   };
 
@@ -229,7 +228,7 @@ const EmailSuggestions: React.FC = () => {
               <div style={selectorStyle}>
                 <span role="img" aria-label="Bulb" style={iconStyle}>
                   <img
-                    src="https://image.similarpng.com/very-thumbnail/2020/08/Shining-bright-idea-light-bulb-with-cogs-on-transparent-background-PNG.png"
+                    src="https://img.freepik.com/premium-vector/light-bulb-with-cogwheel-icon_859093-166.jpg?w=1480"
                     height={'20px'}
                     width={'20px'}
                   ></img>
