@@ -37,7 +37,7 @@ const EmailSuggestions: React.FC = () => {
     padding: '7px 0px 0px 3px',
     marginTop: '10px',
     marginRight: '3px',
-    fontSize: '13px',
+    fontSize: '13.5px',
   };
 
   const headDivider = {
@@ -71,7 +71,7 @@ const EmailSuggestions: React.FC = () => {
     border: 'none',
     margin: '0px',
     backgroundColor: '#deedff',
-    fontSize: '13px',
+    fontSize: '13.5px',
     outline: 'none',
   };
 
@@ -101,7 +101,8 @@ const EmailSuggestions: React.FC = () => {
 
   const closeButton = {
     marginTop: '0px',
-    height: '25px',
+    height: '35px',
+    width: '35px',
     fontSize: '20px',
     color: '#87150b',
     backgroundColor: 'transparent',
@@ -118,7 +119,7 @@ const EmailSuggestions: React.FC = () => {
   useEffect(() => {
     const messageListener = (message: any) => {
       if (message.action === 'receiveEmailText') {
-        const emailText = `Please add give a formal reply to this email and don't add prompt like here is you email and all stuff just give me the proper response in a good way \n ${message?.response}\nalso remember not to add Dear [Recipient's Name], or best regards in the reply or any other irrelevent things and make sure the reply should be short and simple not of big length`;
+        const emailText = `Please add give a formal reply to this email and don't add prompt like here is you email and all stuff just give me the proper response in a good way \n ${message?.response}\nalso remember not to add Dear [Recipient's Name], or best regards in the reply or any other irrelevant things and make sure the reply should be short and simple not of big length`;
         const modifiedEmailText = emailText?.replace('formal', selectedTone);
         if (modifiedEmailText && modifiedEmailText.includes(selectedTone)) {
           generateResponse(modifiedEmailText);
@@ -257,6 +258,13 @@ const EmailSuggestions: React.FC = () => {
               className="close_button"
               style={closeButton}
               onClick={() => handleCloseButton()}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#ffecec';
+                e.currentTarget.style.borderRadius = '50%';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#ffffff';
+              }}
             >
               &#x2715;
             </button>
