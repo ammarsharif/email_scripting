@@ -75,7 +75,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
             position: fixed;
             top: 5em; 
             right: 3em; 
-            width: 350px; 
+            width: 550px; 
             height: 350px;
             border: none;
             border-radius: 10px;

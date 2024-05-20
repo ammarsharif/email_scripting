@@ -4,19 +4,19 @@ const EmailSuggestions: React.FC = () => {
   const containerStyle = {
     backgroundColor: '#f7f7f7',
     padding: '20px',
-    width: '325px',
+    width: '525px',
     margin: '-12px',
-    paddingBottom: '14em',
+    paddingBottom: '17em',
     fontFamily: 'Arial, sans-serif',
   };
 
   const headingStyle = {
     color: '#333',
-    fontSize: '19px',
+    fontSize: '17px',
     fontWeight: 'bold',
     marginBottom: '10px',
-    marginTop: '4px',
-    marginLeft: '8px',
+    marginTop: '10px',
+    marginLeft: '12px',
   };
 
   const header = {
@@ -27,28 +27,61 @@ const EmailSuggestions: React.FC = () => {
 
   const logoHeader = {
     display: 'flex',
+    alignItems: 'center',
+  };
+
+  const toneHeader = {
+    display:'flex'
+  };
+
+  const toneHeaderText = {
+    width: '100%',
+    padding: '7px 0px 0px 3px',
+    marginTop: '10px',
+    fontSize: '15px',
   };
 
   const dividerStyle = {
     width: '100%',
     border: 'none',
     borderBottom: '1px solid #ccc',
-    margin: '10px 0',
+    margin: '18px 0px 10px 0px',
     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
   };
 
-  const selectStyle = {
-    width: '100%',
-    padding: '10px',
-    borderRadius: '4px',
-    border: '1px solid #ccc',
-    marginTop: '10px',
+  const selectContainerStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    border: '1px solid #cfcfcf',
+    borderRadius: '5px',
+    marginRight: '15px',
   };
+
+  const selectStyle = {
+    width: '60%',
+    padding: '10px 24px 10px 18px',
+    borderRadius: '10px',
+    border: 'none',
+    margin: '0px',
+    backgroundColor: '#deedff',
+    fontSize: '15px',
+  };
+
+  const selectorStyle = {
+    marginRight: '0px',
+  };
+  
+  const iconStyle = {
+    display:'flex',
+    marginRight: '5px',
+    marginLeft: '10px',
+    alignItems: 'center',
+  };
+
   const responseItemStyle = {
     cursor: 'pointer',
     padding: '8px',
     marginBottom: '2px',
-    marginTop: '0px',
     backgroundColor: '#eaeaea',
     borderRadius: '4px',
     lineHeight: '1.5',
@@ -69,7 +102,7 @@ const EmailSuggestions: React.FC = () => {
 
   const [responseText, setResponseText] = useState<string | null>(null);
   const [selectedTone, setSelectedTone] = useState<string>('formal');
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const messageListener = (message: any) => {
@@ -171,7 +204,27 @@ const EmailSuggestions: React.FC = () => {
             ></img>
             <p style={headingStyle}>Email Reply Tone</p>
           </div>
-          <div>
+          <div style={toneHeader}>
+          <div style={selectContainerStyle}>
+          <div style={selectorStyle}>
+            <span role="img" aria-label="Bulb" style={iconStyle}>
+            <img src='https://image.similarpng.com/very-thumbnail/2020/08/Shining-bright-idea-light-bulb-with-cogs-on-transparent-background-PNG.png' height={'20px'} width={'20px'}></img>
+            <p style={toneHeaderText}>Tone</p>
+            </span>
+          </div>
+          <select
+            id="toneSelect"
+            style={{...selectStyle, WebkitAppearance: 'none', MozAppearance: 'none', appearance: 'none'}}
+            onChange={handleToneChange}
+          >
+            <option value="formal">👔 Formal</option>
+            <option value="professional">💼 Professional</option>
+            <option value="enthusiastic">🌟 Enthusiastic</option>
+            <option value="not_interested">🚫 Not Interested</option>
+            <option value="impower">💪 Empower</option>
+            <option value="attractive">😍 Attractive</option>
+          </select>
+        </div>
             <button
               className="close_button"
               style={closeButton}
@@ -182,16 +235,7 @@ const EmailSuggestions: React.FC = () => {
           </div>
         </div>
         <hr style={dividerStyle} />
-        <select id="toneSelect" style={selectStyle} onChange={handleToneChange}>
-          <option value="formal">Formal</option>
-          <option value="professional">Professional</option>
-          <option value="enthusiastic">Enthusiastic</option>
-          <option value="not_interested">Not Interested</option>
-          <option value="impower">Impower</option>
-          <option value="attractive">Attractive</option>
-        </select>
         <div>
-          <p style={{ marginTop: '20px' }}>Select a response:</p>
           {loading ? (
             <div className="spinner"></div>
           ) : (
@@ -205,10 +249,10 @@ const EmailSuggestions: React.FC = () => {
                   handleResponseClick(responseText || 'No response available')
                 }
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#e6e6e6';
+                  e.currentTarget.style.backgroundColor = '#f0f0f0';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#f0f0f0';
+                  e.currentTarget.style.backgroundColor = '#e6e6e6';
                 }}
               >
                 {responseText || 'No response available'}
@@ -223,13 +267,13 @@ const EmailSuggestions: React.FC = () => {
 
 const spinnerStyle = `
 .spinner {
-  border: 3px solid rgba(255, 0, 0, 0.3); /* Red border */
+  border: 3px solid rgba(255, 0, 0, 0.3);
   border-radius: 50%;
   border-top: 3px solid #87150b;
-  width: 15px;
-  height: 15px;
+  width: 25px;
+  height: 25px;
   animation: spin 1s linear infinite;
-  margin: 4em auto;
+  margin: 9em auto;
 }
 
 @keyframes spin {
