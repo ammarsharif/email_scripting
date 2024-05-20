@@ -43,8 +43,8 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
         'https://media.licdn.com/dms/image/D4D0BAQGd8H31h5niqg/company-logo_200_200/0/1712309492132/evolvebay_logo?e=2147483647&v=beta&t=tSYT6EkXf7aP709xw1DbPc41AbobGq6qtM5PC1El__I';
       button.alt = 'icon';
       button.id = 'myInjectSmallButton';
-      button.style.width = '28px';
-      button.style.height = '28px';
+      button.style.width = '24px';
+      button.style.height = '24px';
       button.style.borderRadius = '20px';
       button.style.marginLeft = '10px';
       button.style.marginRight = '2px';
