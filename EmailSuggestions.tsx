@@ -107,7 +107,7 @@ const EmailSuggestions: React.FC = () => {
   useEffect(() => {
     const messageListener = (message: any) => {
       if (message.action === 'receiveEmailText') {
-        const emailText = `Please add give a formal reply to this email and don't add prompt like here is you email and all stuff just give me the proper response in a good way \n ${message?.response}`;
+        const emailText = `Please add give a formal reply to this email and don't add prompt like here is you email and all stuff just give me the proper response in a good way \n ${message?.response}\nalso remember not to add Dear [Recipient's Name], or best regards in the reply or any other irrelevent things and make sure the reply should be short and simple not of big length`;
         const modifiedEmailText = emailText?.replace('formal', selectedTone);
         if (modifiedEmailText && modifiedEmailText.includes(selectedTone)) {
           generateResponse(modifiedEmailText);
@@ -133,13 +133,12 @@ const EmailSuggestions: React.FC = () => {
       console.log(
         'Generating Response of ' + modifiedEmailText + '. Please wait...'
       );
-      const response = await fetch('https://chatgpt-42.p.rapidapi.com/gpt4', {
+      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
-          'X-RapidAPI-Key':
-            '198bada44amshd95219dc04db750p14af07jsne52453168165-123',
-          'X-RapidAPI-Host': 'chatgpt-42.p.rapidapi.com',
+          'Authorization':
+            'Bearer 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-123',
         },
         body: JSON.stringify({
           messages: [
@@ -148,14 +147,17 @@ const EmailSuggestions: React.FC = () => {
               content: modifiedEmailText,
             },
           ],
-          web_access: false,
+          model: 'mixtral-8x7b-32768',
         }),
       });
 
-      const data = await response.json();
-      if (data.result) {
-        console.log(data.result, 'API response DATA contain result');
-        setResponseText(data.result);
+      const dataJson = await response.json();
+      const data = dataJson.choices[0].message.content;
+      console.log(data,'DATA FROM THE API::::');
+      
+      if (data) {
+        console.log(data, 'API response DATA contain result');
+        setResponseText(data);
       } else {
         console.log('API response does not contain result');
         return null;
