@@ -225,7 +225,6 @@ const EmailSuggestions: React.FC = () => {
       action: 'suggestedText',
       suggestion: response,
     });
-    console.log(response);
   };
 
   const handleCloseButton = () => {
@@ -298,7 +297,6 @@ const EmailSuggestions: React.FC = () => {
         <hr style={headDivider} />
         <div>
           {loading ? (
-            // <div className="spinner"></div>
             <div>
               <style>{pulseAnimation}</style>
               <LoadingChatBubble size="large" />
