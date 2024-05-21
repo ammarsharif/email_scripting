@@ -192,17 +192,17 @@ const EmailSuggestions: React.FC = () => {
             }),
           }
         );
-
         const dataJson = await response.json();
         const choice = dataJson.choices[0];
         const responseContent = choice?.message.content;
 
         return responseContent ? { text: responseContent } : null;
       };
-
-      const promises = [fetchResponse(), fetchResponse(), fetchResponse()];
-      const responses = await Promise.all(promises);
-
+      const responses = await Promise.all([
+        fetchResponse(),
+        fetchResponse(),
+        fetchResponse(),
+      ]);
       const validResponses = responses.filter(
         (response) => response !== null
       ) as { text: string }[];
