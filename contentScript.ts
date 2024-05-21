@@ -78,7 +78,7 @@ function addInboxButtonIfRequired(url: string) {
 window.onload = function () {
   setTimeout(() => {
     addButtonToPage();
-  }, 1000);
+  }, 500);
 };
 
 document.addEventListener('click', (event) => {

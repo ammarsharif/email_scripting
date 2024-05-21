@@ -110,17 +110,17 @@ const EmailSuggestions: React.FC = () => {
     cursor: 'pointer',
   };
 
-  // const loadingContainerStyle = {
-  //   width: '100%',
-  //   height: '100%',
-  //   backgroundColor: '#f3f3f3', // Background color similar to your UI
-  //   borderRadius: '5px',
-  //   animation: 'pulse 1.5s ease-in-out infinite', // Apply the pulsating animation
-  //   display: 'flex',
-  //   flexDirection: 'column',
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  // };
+  const pulseAnimation = `@keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.01);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }`;
 
   const [responseText, setResponseText] = useState<{ text: string }[] | null>(
     null
@@ -128,22 +128,18 @@ const EmailSuggestions: React.FC = () => {
   const [selectedTone, setSelectedTone] = useState<string>('formal');
   const [loading, setLoading] = useState<boolean>(false);
 
-  // const LoadingChatBubble = () => {
-  //   const bubbleStyle = {
-  //     maxWidth: '70%',
-  //     padding: '10px',
-  //     borderRadius: '10px',
-  //     backgroundColor: '#f3f3f3',
-  //     marginBottom: '10px',
-  //   };
-  
-  //   return (
-  //     <div style={bubbleStyle}>
-  //       <div style={{ width: '80%', marginBottom: '5px' }}></div>
-  //       <div style={{ width: '60%' }}></div>
-  //     </div>
-  //   );
-  // };
+  const LoadingChatBubble = ({ size }) => {
+    const bubbleStyle = {
+      width: size === 'large' ? '85%' : '60%',
+      height: '25px',
+      margin: '10px 0',
+      borderRadius: '10px',
+      backgroundColor: '#f3f3f3',
+      animation: 'pulse 1.5s ease-in-out infinite',
+    };
+
+    return <div style={bubbleStyle}></div>;
+  };
 
   useEffect(() => {
     const messageListener = (message: any) => {
@@ -302,12 +298,16 @@ const EmailSuggestions: React.FC = () => {
         <hr style={headDivider} />
         <div>
           {loading ? (
-            <div className="spinner"></div>
-            // <div style={{...loadingContainerStyle, }}>
-            // //   <LoadingChatBubble />
-            // //   <LoadingChatBubble />
-            // //   <LoadingChatBubble />
-            // // </div>
+            // <div className="spinner"></div>
+            <div>
+              <style>{pulseAnimation}</style>
+              <LoadingChatBubble size="large" />
+              <LoadingChatBubble size="small" />
+              <LoadingChatBubble size="large" />
+              <LoadingChatBubble size="small" />
+              <LoadingChatBubble size="small" />
+              <LoadingChatBubble size="large" />
+            </div>
           ) : (
             <div
               style={{
