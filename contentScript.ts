@@ -49,7 +49,7 @@ const addButtonToReply = () => {
     button.addEventListener('click', async function () {
       chrome.runtime.sendMessage({ action: 'authenticateWithGoogle' });
       iframeExists = false;
-      if (iframeExists) {
+      if (!iframeExists) {
         chrome.runtime.sendMessage({ action: 'closeIframe' });
       }
     });
