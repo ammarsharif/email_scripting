@@ -48,11 +48,8 @@ chrome.runtime.onMessage.addListener(async function (
       active: true,
       currentWindow: true,
     });
-
     if (tab && tab.id) {
       clickHandler();
-    } else {
-      console.log('No active tab found');
     }
   } catch (error) {
     console.log('Error querying tabs:', error);
@@ -69,15 +66,14 @@ const clickHandler = async () => {
     chrome.tabs.sendMessage(activeTab.id, { action: 'clickReplyButton' });
     setTimeout(() => {
       if (activeTab && activeTab.id)
-      chrome.tabs.sendMessage(activeTab.id, {
-        action: 'receiveEmailText',
-        response: emailText,
-      });
+        chrome.tabs.sendMessage(activeTab.id, {
+          action: 'receiveEmailText',
+          response: emailText,
+        });
     }, 200);
   } else {
-    console.log('No active tab found');
+    console.log('API response does not contain result or No Active Tab');
   }
-  console.log('API response does not contain result');
 };
 
 chrome.runtime.onMessage.addListener(async function (
