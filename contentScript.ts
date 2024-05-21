@@ -1,70 +1,113 @@
 let iframeExists = false;
-// chrome.storage.local.get(['authenticated'], (result) => {
-//   if (result.authenticated) {
-//     injectButton();
-//   }
-// });
 
-chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+const addButtonToPage = () => {
   const mainDiv = document.querySelector('.amn');
-  if (mainDiv) {
-    if (!document.getElementById('myInjectButton')) {
-      const button = document.createElement('button');
-      button.textContent = 'Button Added';
-      button.id = 'myInjectButton';
-      button.style.padding = '9.5px 16px';
-      button.style.backgroundColor = 'white';
-      button.style.color = '#87150b';
-      button.style.border = '1px solid #87150b';
-      button.style.borderRadius = '18px';
-      button.style.fontWeight = '500';
-      button.style.marginRight = '8px';
-      button.style.cursor = 'pointer';
-      button.style.fontFamily = 'Arial, sans-serif';
-      button.style.fontSize = '.875rem';
+  if (mainDiv && !document.getElementById('myInjectButton')) {
+    const button = document.createElement('button');
+    button.textContent = 'Button Added';
+    button.id = 'myInjectButton';
+    button.style.padding = '9.5px 16px';
+    button.style.backgroundColor = 'white';
+    button.style.color = '#87150b';
+    button.style.border = '1px solid #87150b';
+    button.style.borderRadius = '18px';
+    button.style.fontWeight = '500';
+    button.style.marginRight = '8px';
+    button.style.cursor = 'pointer';
+    button.style.fontFamily = 'Arial, sans-serif';
+    button.style.fontSize = '.875rem';
 
-      button.addEventListener('click', function () {
-        chrome.runtime.sendMessage({ action: 'authenticateWithGoogle' });
-        chrome.runtime.sendMessage({ action: 'executeOnClicker' });
-      });
+    button.addEventListener('click', function () {
+      chrome.runtime.sendMessage({ action: 'authenticateWithGoogle' });
+      chrome.runtime.sendMessage({ action: 'executeOnClicker' });
+    });
 
-      const firstSpan = mainDiv.querySelector('span');
-      if (firstSpan) {
-        mainDiv.insertBefore(button, firstSpan);
-      } else {
-        mainDiv.appendChild(button);
-      }
+    const firstSpan = mainDiv.querySelector('span');
+    if (firstSpan) {
+      mainDiv.insertBefore(button, firstSpan);
+    } else {
+      mainDiv.appendChild(button);
     }
-  } else if (!mainDiv) {
-    const mainSmallDiv = document.querySelector('.J-J5-Ji.btA');
-    if (!document.getElementById('myInjectSmallButton')) {
-      const button = document.createElement('img');
-      button.src =
-        'https://media.licdn.com/dms/image/D4D0BAQGd8H31h5niqg/company-logo_200_200/0/1712309492132/evolvebay_logo?e=2147483647&v=beta&t=tSYT6EkXf7aP709xw1DbPc41AbobGq6qtM5PC1El__I';
-      button.alt = 'icon';
-      button.id = 'myInjectSmallButton';
-      button.style.width = '24px';
-      button.style.height = '24px';
-      button.style.borderRadius = '20px';
-      button.style.marginLeft = '10px';
-      button.style.marginRight = '2px';
-      button.style.cursor = 'pointer';
+  }
+};
 
-      button.addEventListener('click', async function () {
-        chrome.runtime.sendMessage({ action: 'authenticateWithGoogle' });
-        iframeExists = false;
-        if(iframeExists){
-          chrome.runtime.sendMessage({ action: 'closeIframe' });
-        }
-      });
+const addButtonToReply = () => {
+  const mainSmallDiv = document.querySelector('.J-J5-Ji.btA');
+  if (mainSmallDiv && !document.getElementById('myInjectSmallButton')) {
+    const button = document.createElement('img');
+    button.src =
+      'https://media.licdn.com/dms/image/D4D0BAQGd8H31h5niqg/company-logo_200_200/0/1712309492132/evolvebay_logo?e=2147483647&v=beta&t=tSYT6EkXf7aP709xw1DbPc41AbobGq6qtM5PC1El__I';
+    button.alt = 'icon';
+    button.id = 'myInjectSmallButton';
+    button.style.width = '24px';
+    button.style.height = '24px';
+    button.style.borderRadius = '20px';
+    button.style.marginLeft = '10px';
+    button.style.marginRight = '2px';
+    button.style.cursor = 'pointer';
 
-      const firstSpan = mainSmallDiv?.querySelector('span');
-      if (firstSpan) {
-        mainSmallDiv?.insertBefore(button, firstSpan);
-      } else {
-        mainSmallDiv?.appendChild(button);
+    button.addEventListener('click', async function () {
+      chrome.runtime.sendMessage({ action: 'authenticateWithGoogle' });
+      iframeExists = false;
+      if (iframeExists) {
+        chrome.runtime.sendMessage({ action: 'closeIframe' });
       }
+    });
+
+    const firstSpan = mainSmallDiv?.querySelector('span');
+    if (firstSpan) {
+      mainSmallDiv?.insertBefore(button, firstSpan);
+    } else {
+      mainSmallDiv?.appendChild(button);
     }
+  }
+};
+
+function isGmailInbox(url: string): boolean {
+  return (
+    url.startsWith('https://mail.google.com/mail/u/') && url.includes('#inbox')
+  );
+}
+
+function addInboxButtonIfRequired(url: string) {
+  if (isGmailInbox(url)) {
+    addButtonToPage();
+  }
+}
+
+window.onload = function () {
+  setTimeout(() => {
+    addButtonToPage();
+  }, 1000);
+};
+
+document.addEventListener('click', (event) => {
+  const target = event.target as HTMLElement;
+  if (
+    target &&
+    target.classList.contains('T-I-J3') &&
+    target.classList.contains('og')
+  ) {
+    addButtonToPage();
+  }
+  if (
+    target &&
+    target.classList.contains('ams') &&
+    target.classList.contains('bkH')
+  ) {
+    setTimeout(() => {
+      addButtonToReply();
+    }, 200);
+  }
+});
+
+addInboxButtonIfRequired(window.location.href);
+
+window.addEventListener('hashchange', () => {
+  addInboxButtonIfRequired(window.location.href);
+  const url = window.location.href;
+  if (url.endsWith('#inbox')) {
+    if (iframeExists) chrome.runtime.sendMessage({ action: 'closeIframe' });
   }
 });
 
@@ -73,10 +116,10 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     const replyButton = document.querySelector(
       '.ams.bkH'
     ) as HTMLElement | null;
-      replyButton?.click();
-      if (!iframeExists) {
-        const iframe = document.createElement('iframe');
-        iframe.style.cssText = `
+    replyButton?.click();
+    if (!iframeExists) {
+      const iframe = document.createElement('iframe');
+      iframe.style.cssText = `
             position: fixed;
             top: 5em; 
             right: 3em; 
@@ -89,25 +132,24 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
             z-index: 999999;
             background-color: white;
           `;
-        iframe.src = chrome.runtime.getURL('iframe.html');
-        document.body.appendChild(iframe);
-        iframeExists = true;
+      iframe.src = chrome.runtime.getURL('iframe.html');
+      document.body.appendChild(iframe);
+      iframeExists = true;
 
-        const closeListener = (
-          message: { action: string },
-          sender: any,
-          sendResponse: any
-        ) => {
-          if (message.action === 'closeIframe') {
-            if (iframe && iframe.parentNode) {
-              iframe.parentNode.removeChild(iframe);
-              iframeExists = true;
-            }
+      const closeListener = (
+        message: { action: string },
+        sender: any,
+        sendResponse: any
+      ) => {
+        if (message.action === 'closeIframe') {
+          if (iframe && iframe.parentNode) {
+            iframe.parentNode.removeChild(iframe);
+            iframeExists = true;
           }
-        };
-        chrome.runtime.onMessage.addListener(closeListener);
-      }
-    
+        }
+      };
+      chrome.runtime.onMessage.addListener(closeListener);
+    }
   }
 });
 

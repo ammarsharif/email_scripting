@@ -110,11 +110,40 @@ const EmailSuggestions: React.FC = () => {
     cursor: 'pointer',
   };
 
+  // const loadingContainerStyle = {
+  //   width: '100%',
+  //   height: '100%',
+  //   backgroundColor: '#f3f3f3', // Background color similar to your UI
+  //   borderRadius: '5px',
+  //   animation: 'pulse 1.5s ease-in-out infinite', // Apply the pulsating animation
+  //   display: 'flex',
+  //   flexDirection: 'column',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  // };
+
   const [responseText, setResponseText] = useState<{ text: string }[] | null>(
     null
   );
   const [selectedTone, setSelectedTone] = useState<string>('formal');
   const [loading, setLoading] = useState<boolean>(false);
+
+  // const LoadingChatBubble = () => {
+  //   const bubbleStyle = {
+  //     maxWidth: '70%',
+  //     padding: '10px',
+  //     borderRadius: '10px',
+  //     backgroundColor: '#f3f3f3',
+  //     marginBottom: '10px',
+  //   };
+  
+  //   return (
+  //     <div style={bubbleStyle}>
+  //       <div style={{ width: '80%', marginBottom: '5px' }}></div>
+  //       <div style={{ width: '60%' }}></div>
+  //     </div>
+  //   );
+  // };
 
   useEffect(() => {
     const messageListener = (message: any) => {
@@ -274,6 +303,11 @@ const EmailSuggestions: React.FC = () => {
         <div>
           {loading ? (
             <div className="spinner"></div>
+            // <div style={{...loadingContainerStyle, }}>
+            // //   <LoadingChatBubble />
+            // //   <LoadingChatBubble />
+            // //   <LoadingChatBubble />
+            // // </div>
           ) : (
             <div
               style={{
