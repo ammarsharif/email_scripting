@@ -3,12 +3,21 @@ let iframeExists = false;
 const addButtonToPage = () => {
   const mainDiv = document.querySelector('.amn');
   if (mainDiv && !document.getElementById('myInjectButton')) {
+    const contentWrapper = document.createElement('div');
+    contentWrapper.style.display = 'flex';
+    contentWrapper.style.alignItems = 'center';
     const button = document.createElement('button');
-    button.textContent = 'EvoButton';
+    const logoImg = document.createElement('img');
+    logoImg.src =
+      'https://media.licdn.com/dms/image/D4D0BAQGd8H31h5niqg/company-logo_200_200/0/1712309492132/evolvebay_logo?e=2147483647&v=beta&t=tSYT6EkXf7aP709xw1DbPc41AbobGq6qtM5PC1El__I';
+    logoImg.style.width = '17px';
+    logoImg.style.height = '17px';
+    logoImg.style.marginRight = '5px';
+    logoImg.style.borderRadius = '50%';
     button.id = 'myInjectButton';
     button.style.padding = '9.5px 16px';
-    button.style.backgroundColor = '#87150b';
-    button.style.color = 'white';
+    button.style.backgroundColor = 'transparent';
+    button.style.color = '#87150b';
     button.style.border = '1px solid #87150b';
     button.style.borderRadius = '18px';
     button.style.fontWeight = '500';
@@ -16,7 +25,7 @@ const addButtonToPage = () => {
     button.style.cursor = 'pointer';
     button.style.fontFamily = 'Arial, sans-serif';
     button.style.fontSize = '.875rem';
-
+    const buttonText = document.createTextNode('EvolveBay');
     button.addEventListener('click', function () {
       chrome.runtime.sendMessage({ action: 'authenticateWithGoogle' });
       chrome.runtime.sendMessage({ action: 'executeOnClicker' });
@@ -26,8 +35,11 @@ const addButtonToPage = () => {
     if (firstSpan) {
       mainDiv.insertBefore(button, firstSpan);
     } else {
-      mainDiv.appendChild(button);
+      console.log('Span not found');
     }
+    contentWrapper.appendChild(logoImg);
+    contentWrapper.appendChild(buttonText);
+    button.appendChild(contentWrapper);
   }
 };
 
