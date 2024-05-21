@@ -2,7 +2,6 @@ let emailText = null;
 export async function getAuthToken(): Promise<string | undefined> {
   return new Promise((resolve) => {
     chrome?.identity?.getAuthToken({ interactive: true }, (token) => {
-      console.log(token, 'Token Generated::::');
       if (token) {
         resolve(token);
       } else {

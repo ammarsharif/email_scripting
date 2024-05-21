@@ -167,61 +167,57 @@ const EmailSuggestions: React.FC = () => {
     chrome.runtime.sendMessage({ action: 'generateEmailText' });
   };
 
-  const generateResponse = async (modifiedEmailText: string) => {
-    try {
-      setLoading(true);
-      console.log(
-        'Generating Response of ' + modifiedEmailText + '. Please wait...'
+const generateResponse = async (modifiedEmailText: string) => {
+  try {
+    setLoading(true);
+    const fetchResponse = async () => {
+      const response = await fetch(
+        'https://openrouter.ai/api/v1/chat/completions',
+        {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer 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',
+          },
+          body: JSON.stringify({
+            messages: [
+              {
+                role: 'user',
+                content: modifiedEmailText,
+              },
+            ],
+            model: 'openai/gpt-3.5-turbo',
+            max_tokens: 200,
+          }),
+        }
       );
 
-      const responses: { text: string }[] = [];
+      const dataJson = await response.json();
+      const choice = dataJson.choices[0];
+      const responseContent = choice?.message.content;
 
-      for (let i = 0; i < 3; i++) {
-        const response = await fetch(
-          'https://openrouter.ai/api/v1/chat/completions',
-          {
-            method: 'POST',
-            headers: {
-              'content-type': 'application/json',
-              Authorization:
-                'Bearer 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',
-            },
-            body: JSON.stringify({
-              messages: [
-                {
-                  role: 'user',
-                  content: modifiedEmailText,
-                },
-              ],
-              model: 'openai/gpt-3.5-turbo',
-              max_tokens: 200,
-            }),
-          }
-        );
+      return responseContent ? { text: responseContent } : null;
+    };
 
-        const dataJson = await response.json();
-        const choice = dataJson.choices[0];
-        const responseContent = choice?.message.content;
+    const promises = [fetchResponse(), fetchResponse(), fetchResponse()];
+    const responses = await Promise.all(promises);
 
-        if (responseContent) {
-          responses.push({ text: responseContent });
-        }
-      }
+    const validResponses = responses.filter(response => response !== null) as { text: string }[];
 
-      if (responses.length === 3) {
-        console.log(responses, 'API response DATA contain result');
-        setResponseText(responses);
-      } else {
-        console.log('API response does not contain three results');
-        return null;
-      }
-    } catch (error) {
-      console.error('Error:', error);
+    if (validResponses.length === 3) {
+      console.log(validResponses, 'API response DATA contain result');
+      setResponseText(validResponses);
+    } else {
+      console.log('API response does not contain three results');
       return null;
-    } finally {
-      setLoading(false);
     }
-  };
+  } catch (error) {
+    console.error('Error:', error);
+    return null;
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleResponseClick = (response: string) => {
     chrome.runtime.sendMessage({
