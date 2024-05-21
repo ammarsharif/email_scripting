@@ -132,9 +132,9 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     if (!iframeExists) {
       const iframe = document.createElement('iframe');
       iframe.style.cssText = `
-            position: fixed;
-            top: 5em; 
-            right: 3em; 
+            position: absolute;
+            top: 11em; 
+            left: 4em; 
             width: 550px; 
             height: 350px;
             border: none;
