@@ -4,11 +4,11 @@ const addButtonToPage = () => {
   const mainDiv = document.querySelector('.amn');
   if (mainDiv && !document.getElementById('myInjectButton')) {
     const button = document.createElement('button');
-    button.textContent = 'Button Added';
+    button.textContent = 'EvoButton';
     button.id = 'myInjectButton';
     button.style.padding = '9.5px 16px';
-    button.style.backgroundColor = 'white';
-    button.style.color = '#87150b';
+    button.style.backgroundColor = '#87150b';
+    button.style.color = 'white';
     button.style.border = '1px solid #87150b';
     button.style.borderRadius = '18px';
     button.style.fontWeight = '500';

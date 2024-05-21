@@ -68,10 +68,13 @@ const clickHandler = async () => {
   const activeTab = tabs[0];
   if (activeTab && activeTab.id) {
     chrome.tabs.sendMessage(activeTab.id, { action: 'clickReplyButton' });
-    chrome.tabs.sendMessage(activeTab.id, {
-      action: 'receiveEmailText',
-      response: emailText,
-    });
+    setTimeout(() => {
+      if (activeTab && activeTab.id)
+      chrome.tabs.sendMessage(activeTab.id, {
+        action: 'receiveEmailText',
+        response: emailText,
+      });
+    }, 200);
   } else {
     console.log('No active tab found');
   }
