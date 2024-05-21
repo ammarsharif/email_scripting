@@ -30,8 +30,12 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         {
-          from: path.resolve(__dirname, 'manifest.json'),
-          to: path.resolve(__dirname, 'dist'),
+          from: path.resolve('manifest.json'),
+          to: path.resolve('dist'),
+        },
+        {
+          from: path.resolve('icons'),
+          to: path.resolve('dist/icons'),
         },
       ],
     }),

@@ -267,9 +267,6 @@ const EmailSuggestions: React.FC = () => {
                 id="toneSelect"
                 style={{
                   ...selectStyle,
-                  WebkitAppearance: 'none',
-                  MozAppearance: 'none',
-                  appearance: 'none',
                 }}
                 onChange={handleToneChange}
               >
