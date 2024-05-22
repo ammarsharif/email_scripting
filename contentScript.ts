@@ -1,4 +1,4 @@
-import './stylesBackground.css';
+import './stylesContentScript.css';
 let iframeExists = false;
 
 const addButtonToPage = () => {

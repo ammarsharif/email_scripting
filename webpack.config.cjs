@@ -34,7 +34,7 @@ module.exports = {
           to: path.resolve('dist'),
         },
         {
-          from: path.resolve( 'stylesBackground.css'),
+          from: path.resolve( 'stylesContentScript.css'),
           to: path.resolve('dist'),
         },
         {
