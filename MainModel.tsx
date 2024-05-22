@@ -1,11 +1,12 @@
 import React, { ChangeEvent, useEffect, useState, useRef } from 'react';
-import './stylesEmailSuggestions.css';
-const EmailSuggestions: React.FC = () => {
+import { TbReload } from 'react-icons/tb';
+import './stylesMainModel.css';
+const MainModel: React.FC = () => {
   const [responseText, setResponseText] = useState<{ text: string }[] | null>(
     null
   );
   const [selectedTone, setSelectedTone] = useState<string>('formal');
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const useRefState = useRef(false);
 
   const LoadingChatBubble = ({ size }) => {
@@ -110,6 +111,15 @@ const EmailSuggestions: React.FC = () => {
     chrome.runtime.sendMessage({ action: 'closeIframe' });
   };
 
+  const handleReloadClick = async () => {
+    setLoading(true);
+    useRefState.current = false;
+    chrome.runtime.sendMessage({
+      action: 'generateEmailText',
+      selectedTone: selectedTone,
+    });
+  };
+
   return (
     <div className="container">
       <div>
@@ -199,6 +209,14 @@ const EmailSuggestions: React.FC = () => {
               ) : (
                 <p className="response-item">No response available</p>
               )}
+              {!loading ? (
+            <button
+            className="reload-button"
+              onClick={handleReloadClick}
+            >
+              <TbReload />
+            </button>
+          ) : null}
             </div>
           )}
         </div>
@@ -207,4 +225,4 @@ const EmailSuggestions: React.FC = () => {
   );
 };
 
-export default EmailSuggestions;
+export default MainModel;

@@ -108,6 +108,22 @@
   align-items: center;
 }
 
+.reload-button {
+  background-color: #87150b;
+  border: none;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  color: #ffffff;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-end;
+  margin-right: 10px;
+}
+
 @keyframes pulse {
   0% {
     transform: scale(1);

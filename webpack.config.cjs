@@ -38,7 +38,7 @@ module.exports = {
           to: path.resolve('dist'),
         },
         {
-          from: path.resolve( 'stylesEmailSuggestions.css'),
+          from: path.resolve( 'stylesMainModel.css'),
           to: path.resolve('dist'),
         },
         {
