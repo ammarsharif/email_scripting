@@ -12,7 +12,7 @@ module.exports = {
     iframe: './iframe.tsx',
   },
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve('dist'),
     filename: '[name].js',
     clean: true,
   },
@@ -31,6 +31,10 @@ module.exports = {
       patterns: [
         {
           from: path.resolve('manifest.json'),
+          to: path.resolve('dist'),
+        },
+        {
+          from: path.resolve( 'stylesBackground.css'),
           to: path.resolve('dist'),
         },
         {
@@ -55,6 +59,10 @@ module.exports = {
             ],
           },
         },
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
       },
     ],
   },
