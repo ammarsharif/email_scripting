@@ -38,6 +38,10 @@ module.exports = {
           to: path.resolve('dist'),
         },
         {
+          from: path.resolve( 'stylesEmailSuggestions.css'),
+          to: path.resolve('dist'),
+        },
+        {
           from: path.resolve('icons'),
           to: path.resolve('dist/icons'),
         },
