@@ -210,13 +210,10 @@ const MainModel: React.FC = () => {
                 <p className="response-item">No response available</p>
               )}
               {!loading ? (
-            <button
-            className="reload-button"
-              onClick={handleReloadClick}
-            >
-              <TbReload />
-            </button>
-          ) : null}
+                <button className="reload-button" onClick={handleReloadClick}>
+                  <TbReload />
+                </button>
+              ) : null}
             </div>
           )}
         </div>
