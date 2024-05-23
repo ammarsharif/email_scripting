@@ -31,7 +31,7 @@ const TabUserProfile: React.FC = () => {
     try {
       setLoading(true);
       const response = await fetch(
-        `https://people.googleapis.com/v1/people/me?personFields=names,emailAddresses,addresses,clientData,events,genders,locations,nicknames,occupations,photos`,
+        `https://people.googleapis.com/v1/people/me?personFields=names,emailAddresses,photos`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
