@@ -55,10 +55,10 @@ function App() {
               action: 'openUserProfile',
               token: token,
             });
-          }, 1000);
+          }, 300);
         } 
         else {
-          const newUrl = chrome.runtime.getURL('infoModel.html');
+          const newUrl = chrome.runtime.getURL('tabInfoModel.html');
           chrome.tabs.create({ url: newUrl }, (newTab) => {
             chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo) {
               if (tabId === newTab?.id && changeInfo.status === 'complete') {

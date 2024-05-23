@@ -11,6 +11,7 @@ module.exports = {
     react: './index.tsx',
     iframe: './iframe.tsx',
     infoModel: './infoModel.tsx',
+    tabInfoModel: './tabInfoModel.tsx',
   },
   output: {
     path: path.resolve('dist'),
@@ -33,6 +34,11 @@ module.exports = {
       filename: 'infoModel.html',
       inject: false,
     }),
+    new HtmlWebpackPlugin({
+      template: './tabInfoModel.html',
+      filename: 'tabInfoModel.html',
+      inject: false,
+    }),
     new CopyPlugin({
       patterns: [
         {
@@ -40,11 +46,19 @@ module.exports = {
           to: path.resolve('dist'),
         },
         {
-          from: path.resolve( 'stylesContentScript.css'),
+          from: path.resolve('stylesContentScript.css'),
           to: path.resolve('dist'),
         },
         {
-          from: path.resolve( 'stylesMainModel.css'),
+          from: path.resolve('stylesMainModel.css'),
+          to: path.resolve('dist'),
+        },
+        {
+          from: path.resolve('stylesUserProfile.css'),
+          to: path.resolve('dist'),
+        },
+        {
+          from: path.resolve('stylesTabUserProfile.css'),
           to: path.resolve('dist'),
         },
         {

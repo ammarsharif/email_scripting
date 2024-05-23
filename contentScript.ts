@@ -1,18 +1,6 @@
 import './stylesContentScript.css';
 let iframeExists = false;
 let iUserProfile = false;
-
-// chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-//   if (message.action === 'showUserProfile') {
-//     showUserProfile(message.token);
-//   }
-// });
-
-// const showUserProfile = (token: any) => {
-//   console.log('Displaying user profile with token:', token);
-// };
-
-
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   if (msg.action === 'openUserProfile') {
     if (!iUserProfile) {
