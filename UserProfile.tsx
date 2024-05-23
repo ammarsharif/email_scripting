@@ -44,7 +44,7 @@ const UserProfile: React.FC = () => {
     try {
       setLoading(true);
       const response = await fetch(
-        `https://people.googleapis.com/v1/people/me?personFields=names,emailAddresses,addresses,clientData,events,genders,locations,nicknames,occupations,photos`,
+        `https://people.googleapis.com/v1/people/me?personFields=names,emailAddresses,photos`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -53,7 +53,19 @@ const UserProfile: React.FC = () => {
       );
       const profileInfo = await response.json();
       console.log(profileInfo);
-
+      const backendResponse = await fetch('http://localhost:5000/api/profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(profileInfo),
+      });
+  
+      if (backendResponse.ok) {
+        console.log('Profile data sent to the backend');
+      } else {
+        console.error('Error sending profile data to the backend');
+      }
       setResponseText(profileInfo);
     } catch (error) {
       console.error('Error fetching profile info:', error);
