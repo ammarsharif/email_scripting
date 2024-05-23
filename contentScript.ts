@@ -1,5 +1,50 @@
 import './stylesContentScript.css';
 let iframeExists = false;
+let iUserProfile = false;
+
+// chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+//   if (message.action === 'showUserProfile') {
+//     showUserProfile(message.token);
+//   }
+// });
+
+// const showUserProfile = (token: any) => {
+//   console.log('Displaying user profile with token:', token);
+// };
+
+
+chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+  if (msg.action === 'openUserProfile') {
+    if (!iUserProfile) {
+      console.log(msg, 'msg:::::::');
+      const iframe = document.createElement('iframe');
+      iframe.classList.add('user-profile-iframe');
+      iframe.src = chrome.runtime.getURL('infoModel.html');
+      document.body.appendChild(iframe);
+      iUserProfile = true;
+      const closeListener = (
+        message: { action: string },
+        sender: any,
+        sendResponse: any
+      ) => {
+        if (message.action === 'closeIframe') {
+          if (iframe && iframe.parentNode) {
+            iframe.parentNode.removeChild(iframe);
+            setTimeout(() => {
+              const replyButton = document.querySelector(
+                '.og.T-I-J3'
+              ) as HTMLElement | null;
+              replyButton?.click();
+            }, 10);
+            iframeExists = true;
+            iUserProfile = false;
+          }
+        }
+      };
+      chrome.runtime.onMessage.addListener(closeListener);
+    }
+  }
+});
 
 const addButtonToPage = () => {
   const mainDiv = document.querySelector('.amn');
@@ -108,7 +153,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
       '.ams.bkH'
     ) as HTMLElement | null;
     replyButton?.click();
-    if (!iframeExists) {
+    if (!iframeExists && !iUserProfile) {
       const iframe = document.createElement('iframe');
       iframe.classList.add('custom-iframe');
       iframe.src = chrome.runtime.getURL('iframe.html');

@@ -23,7 +23,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://mail.google.com/*"],
+      "matches": ["<all_urls>"],
       "js": ["contentScript.js"]
     }
   ],
@@ -35,12 +35,13 @@
       "https://www.googleapis.com/auth/gmail.compose",
       "https://www.googleapis.com/auth/gmail.modify",
       "https://www.googleapis.com/auth/contacts.readonly",
+      "https://www.googleapis.com/auth/contacts",
       "profile"
     ]
   },
   "web_accessible_resources": [
     {
-      "resources": ["index.html", "iframe.html"],
+      "resources": ["index.html", "iframe.html", "infoModel.html"],
       "matches": ["<all_urls>"]
     }
   ],

@@ -10,6 +10,7 @@ module.exports = {
     background: './background.ts',
     react: './index.tsx',
     iframe: './iframe.tsx',
+    infoModel: './infoModel.tsx',
   },
   output: {
     path: path.resolve('dist'),
@@ -25,6 +26,11 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './iframe.html',
       filename: 'iframe.html',
+      inject: false,
+    }),
+    new HtmlWebpackPlugin({
+      template: './infoModel.html',
+      filename: 'infoModel.html',
       inject: false,
     }),
     new CopyPlugin({

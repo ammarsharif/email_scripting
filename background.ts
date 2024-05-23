@@ -1,15 +1,24 @@
 let emailText = null;
 export async function getAuthToken(): Promise<string | undefined> {
   return new Promise((resolve) => {
-    chrome?.identity?.getAuthToken({ interactive: true }, (token) => {
-      if (token) {
-        console.log('Token:', token);
-        resolve(token);
-      } else {
-        console.error('Error obtaining token:', chrome.runtime.lastError);
-        resolve(undefined);
+    chrome?.identity?.getAuthToken(
+      {
+        interactive: true,
+        scopes: [
+          'https://www.googleapis.com/auth/userinfo.email',
+          'https://www.googleapis.com/auth/userinfo.profile',
+        ],
+      },
+      (token) => {
+        if (token) {
+          console.log('Token:', token);
+          resolve(token);
+        } else {
+          console.error('Error obtaining token:', chrome.runtime.lastError);
+          resolve(undefined);
+        }
       }
-    });
+    );
   });
 }
 
@@ -37,29 +46,6 @@ chrome.runtime.onMessage.addListener(async function (
   }
 });
 
-chrome.runtime.onMessage.addListener(async function (
-  message,
-  sender,
-  sendResponse
-) {
-  if (message.action === 'getProfileInfo') {
-    const accessToken = await getAuthToken();
-    try {
-      const response = await fetch(
-        `https://people.googleapis.com/v1/people/me?personFields=names,emailAddresses,photos`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      const profileInfo = await response.json();
-      console.log('Profile info:', profileInfo);
-    } catch (error) {
-      console.error('Error fetching profile info:', error);
-    }
-  }
-});
 
 chrome.runtime.onMessage.addListener(async function (
   message,
@@ -67,7 +53,7 @@ chrome.runtime.onMessage.addListener(async function (
   sendResponse
 ) {
   try {
-    const [tab] = await chrome.tabs.query({
+    const [tab] = await chrome?.tabs?.query({
       active: true,
       currentWindow: true,
     });
@@ -93,7 +79,7 @@ const clickHandler = async () => {
           action: 'receiveEmailText',
           response: emailText,
         });
-    }, 300);
+    }, 500);
   } else {
     console.log('API response does not contain result or No Active Tab');
   }

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { getAuthToken } from './background';
 
 function App() {
   const containerStyle = {
@@ -38,11 +39,45 @@ function App() {
   };
 
   const onButtonClick = async () => {
-    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-    const activeTab = tabs[0];
-    chrome.tabs.sendMessage(activeTab.id || 0, '');
+    try {
+      const token = await getAuthToken();
+      const tabs = await chrome?.tabs?.query({ active: true, currentWindow: true });
+      console.log('Tabs:', tabs);
+      if (Array.isArray(tabs) && tabs.length > 0) {
+        const activeTab = tabs[0];
+        console.log('Active Tab:', activeTab);
+        const gmailPattern = /https:\/\/mail\.google\.com\//;
+  
+        if (activeTab.url && gmailPattern.test(activeTab.url)) {
+          chrome.tabs.sendMessage(activeTab.id || 0, '');
+          setTimeout(() => {
+            chrome.tabs.sendMessage(activeTab.id || 0, {
+              action: 'openUserProfile',
+              token: token,
+            });
+          }, 1000);
+        } 
+        else {
+          const newUrl = chrome.runtime.getURL('infoModel.html');
+          chrome.tabs.create({ url: newUrl }, (newTab) => {
+            chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo) {
+              if (tabId === newTab?.id && changeInfo.status === 'complete') {
+                chrome.tabs.onUpdated.removeListener(listener);
+                chrome.tabs.sendMessage(tabId, { action: 'showUserProfile', token: token });
+              }
+            });
+          });
+        }
+      
+      } else {
+        console.error('No active tab found');
+      }
+    } catch (error) {
+      console.error('Error getting auth token or querying tabs: ', error);
+    }
   };
-
+  
+  
   return (
     <div style={containerStyle}>
         <div style={header}>
@@ -55,6 +90,15 @@ function App() {
             ></img>
             <p style={headingStyle}>EvolveBay</p>
           </div>
+          <button onClick={onButtonClick} style={{
+            padding: '10px 30px',
+            backgroundColor:'#4CAF50',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            outline: 'none',
+          }}>See Profile</button>
         </div>
         <hr style={headDivider} />
     </div>
