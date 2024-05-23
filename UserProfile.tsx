@@ -140,7 +140,7 @@ const UserProfile: React.FC = () => {
                   />
                 </div>
               ) : (
-                <p className="response-item">No Profile Available</p>
+                <p className="no-profile">No Profile Available</p>
               )}
             </div>
           )}

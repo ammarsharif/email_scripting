@@ -40,7 +40,19 @@ const TabUserProfile: React.FC = () => {
       );
       const profileInfo = await response.json();
       console.log(profileInfo);
-
+      const backendResponse = await fetch('http://localhost:5000/api/profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(profileInfo),
+      });
+  
+      if (backendResponse.ok) {
+        console.log('Profile data sent to the backend');
+      } else {
+        console.error('Error sending profile data to the backend');
+      }
       setResponseText(profileInfo);
     } catch (error) {
       console.error('Error fetching profile info:', error);
@@ -90,7 +102,7 @@ const TabUserProfile: React.FC = () => {
                   />
                 </div>
               ) : (
-                <p className="response-item">No Profile Available</p>
+                <p className="no-profile">No Profile Available</p>
               )}
             </div>
           )}
