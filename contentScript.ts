@@ -4,6 +4,7 @@ let iUserProfile = false;
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   if (msg.action === 'openUserProfile') {
     if (!iUserProfile) {
+      console.log(msg, 'msg:::::::');
       const iframe = document.createElement('iframe');
       iframe.classList.add('user-profile-iframe');
       iframe.src = chrome.runtime.getURL('infoModel.html');
@@ -23,7 +24,7 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
               ) as HTMLElement | null;
               replyButton?.click();
             }, 10);
-            iframeExists = false;
+            iframeExists = true;
             iUserProfile = false;
           }
         }
@@ -71,8 +72,8 @@ const addButtonToReply = () => {
     button.classList.add('myInjectSmallButton');
     button.addEventListener('click', async function () {
       chrome.runtime.sendMessage({ action: 'authenticateWithGoogle' });
-      chrome.runtime.sendMessage({ action: 'clickReplyButton' });
-      if (iframeExists) {
+      iframeExists = false;
+      if (!iframeExists) {
         chrome.runtime.sendMessage({ action: 'closeIframe' });
       }
     });
@@ -146,6 +147,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
       iframe.src = chrome.runtime.getURL('iframe.html');
       document.body.appendChild(iframe);
       iframeExists = true;
+
       const closeListener = (
         message: { action: string },
         sender: any,
@@ -154,7 +156,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
         if (message.action === 'closeIframe') {
           if (iframe && iframe.parentNode) {
             iframe.parentNode.removeChild(iframe);
-            iframeExists = false;
+            iframeExists = true;
           }
         }
       };
